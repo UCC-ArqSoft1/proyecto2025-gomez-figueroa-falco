@@ -1,16 +1,14 @@
 package domain
 
-import "time"
-
 type ActividadesDeportivas struct {
-	Horarios  []Horarios `json:"horario"`
-	Cupo      int        `json:"cupo"`
-	Categoria string     `json:"categoria"`
+	Horarios  Horarios `json:"horario"`
+	Cupo      int      `json:"cupo"`
+	Categoria string   `json:"categoria"`
 }
 
 type Horarios struct {
 	Dias []DiaSemana
-	Hora Horas
+	Hora []Horas
 }
 
 type DiaSemana string
@@ -25,6 +23,6 @@ const (
 )
 
 type Horas struct {
-	Empieza time.Time `json:"empieza"`
-	Termina time.Time `json:"termina"`
+	Empieza string `json:"empieza"`
+	Termina string `json:"termina"`
 }

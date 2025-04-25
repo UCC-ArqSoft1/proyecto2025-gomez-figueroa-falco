@@ -2,23 +2,26 @@ package services
 
 import (
 	"backend/domain"
-	"time"
 )
 
 func GetActividadById(id int) domain.ActividadesDeportivas {
 
-	start1, _ := time.Parse("15:04", "18:00")
-	end1, _ := time.Parse("15:04", "19:00")
-	parte1 := domain.Horarios{
-		Dias: []domain.DiaSemana{domain.Lunes},
-		Hora: domain.Horas{
-			Empieza: start1,
-			Termina: end1,
+	horarios := domain.Horarios{
+		Dias: []domain.DiaSemana{domain.Lunes, domain.Martes},
+		Hora: []domain.Horas{
+			{
+				Empieza: "18:00",
+				Termina: "19:00",
+			},
+			{
+				Empieza: "21:00",
+				Termina: "22:00",
+			},
 		},
 	}
 
 	actividad := domain.ActividadesDeportivas{
-		Horarios:  []domain.Horarios{parte1},
+		Horarios:  horarios,
 		Cupo:      20,
 		Categoria: "Sppining",
 	}
