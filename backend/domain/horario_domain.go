@@ -11,6 +11,4 @@ type Horario struct {
 	HoraFin     time.Time `gorm:"type:time;not null;column:HoraFin" json:"hora_fin"`
 	IdActividad uint      `gorm:"not null;column:IdActividad" json:"id_actividad"`
 	CupoHorario *uint     `gorm:"column:CupoHorario" json:"cupo_horario,omitempty"`
-
-	Actividad Actividad `gorm:"foreignKey:IdActividad"`
 }

@@ -14,7 +14,7 @@ var (
 
 func init() {
 	user := "root"
-	password := ""
+	password := "1234"
 	host := "localhost"
 	port := 3306
 	database := "backend"
@@ -30,9 +30,37 @@ func init() {
 
 	DB.AutoMigrate(&dao.User{})
 	DB.Create(&dao.User{
-		ID:           1,
+		Id:           1,
 		Username:     "emiliano",
 		PasswordHash: "121j212hs9812sj2189sj",
+	})
+
+	DB.AutoMigrate(&dao.Actividad{})
+	DB.Create(&dao.Actividad{
+		Id:          1,
+		Nombre:      "Actividad 1",
+		Descripcion: "Descripcion de la actividad 1",
+		Categoria:   "Categoria 1",
+		CupoTotal:   10,
+		Profesor:    "Profesor 1",
+		Imagen:      "imagen1.jpg",
+	})
+	DB.AutoMigrate(&dao.Horario{})
+	DB.Create(&dao.Horario{
+		Id:          1,
+		IdActividad: 1,
+		Dia:         "Lunes",
+		HoraInicio:  "10:00",
+		HoraFin:     "11:00",
+		CupoHorario: nil,
+	})
+
+	DB.AutoMigrate(&dao.Inscripcion{})
+	DB.Create(&dao.Inscripcion{
+		Id:               1,
+		IdUsuario:        1,
+		IdHorario:        1,
+		FechaInscripcion: "2023-10-01",
 	})
 }
 
