@@ -3,6 +3,7 @@ package clients
 import (
 	"backend/dao"
 	"fmt"
+	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -50,8 +51,8 @@ func init() {
 		Id:          1,
 		IdActividad: 1,
 		Dia:         "Lunes",
-		HoraInicio:  "10:00",
-		HoraFin:     "11:00",
+		HoraInicio:  time.Now(),
+		HoraFin:     time.Now(),
 		CupoHorario: nil,
 	})
 
@@ -60,7 +61,7 @@ func init() {
 		Id:               1,
 		IdUsuario:        1,
 		IdHorario:        1,
-		FechaInscripcion: "2023-10-01",
+		FechaInscripcion: time.Now(),
 	})
 }
 
@@ -69,4 +70,11 @@ func GetUserByUsername(username string) dao.User {
 	// SELECT * FROM users WHERE username = ? LIMIT 1
 	DB.First(&user, "username = ?", username)
 	return user
+}
+
+func GetActividadById(id int) dao.Actividad {
+	var actividad dao.Actividad
+	// SELECT * FROM users WHERE username = ? LIMIT 1
+	DB.First(&actividad, id)
+	return actividad
 }
