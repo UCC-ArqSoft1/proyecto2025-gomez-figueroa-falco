@@ -1,6 +1,6 @@
-package domain
+package dao
 
-type ActividadesDeportivas struct {
+type Actividad struct {
 	Id          uint   `gorm:"primaryKey;column:Id" json:"id" `
 	Nombre      string `gorm:"size:100;not null;column:Nombre" json:"nombre"`
 	Descripcion string `gorm:"type:text;column:Descripcion" json:"descripcion,omitempty"`
@@ -8,8 +8,4 @@ type ActividadesDeportivas struct {
 	CupoTotal   uint   `gorm:"not null;column:CupoTotal" json:"cupo_total"`
 	Profesor    string `gorm:"size:100;column:Profesor" json:"profesor,omitempty"`
 	Imagen      string `gorm:"size:255;column:Imagen"  json:"imagen,omitempty"`
-
-	// Relaciones
-	Horarios      []Horario     `gorm:"foreignKey:IdActividad" json:"horarios"`
-	Inscripciones []Inscripcion `gorm:"foreignKey:IdActividad" json:"inscripciones"`
 }
