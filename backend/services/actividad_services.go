@@ -26,7 +26,7 @@ func GetActividadById(id int) domain.ActividadesDeportivas {
 func BuscarActividades(q string) ([]dao.Actividad, error) {
 	var acts []dao.Actividad
 	db := clients.DB
-	if q != "" {
+	if q == "" {
 		return acts, db.Find(&acts).Error
 	}
 	pattern := "%" + q + "%"

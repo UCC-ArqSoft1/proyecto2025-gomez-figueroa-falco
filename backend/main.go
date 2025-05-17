@@ -3,12 +3,14 @@ package main
 import (
 	"backend/controllers"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 
 	router := gin.Default()
+	router.Use(cors.Default())
 
 	router.GET("/actividades", controllers.GetActividades)
 	router.GET("/actividad/:id", controllers.GetActividadById)

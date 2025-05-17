@@ -18,7 +18,7 @@ func GenerateToken(userId uint) (string, error) {
 		ID:        fmt.Sprintf("%d", userId),                          // id del usuario
 
 	}
-
+	//crear token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	//firmar el token
