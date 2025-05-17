@@ -15,7 +15,7 @@ var (
 
 func init() {
 	user := "root"
-	password := "Base041104"
+	password := "1234"
 	host := "localhost"
 	port := 3306
 	database := "backend"
@@ -33,7 +33,7 @@ func init() {
 	DB.Create(&dao.User{
 		Id:           1,
 		Username:     "emiliano",
-		PasswordHash: "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
+		PasswordHash: "121j212hs9812sj2189sj",
 	})
 
 	DB.AutoMigrate(&dao.Actividad{})
