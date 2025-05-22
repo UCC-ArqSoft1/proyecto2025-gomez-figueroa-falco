@@ -1,21 +1,78 @@
+/* 1. Variables ya las hereda de App.css */
+
+
+/* 2. Fondo y contenedor */
 .login-container {
     display: flex;
-    font-family: Arial, Helvetica, sans-serif;
-    justify-items: center;
+    justify-content: center;
+    /* centrar horizontal */
     align-items: center;
-    width: 100vw;
-}
-
-.login-form {
-    display: block;
-    border-radius: 4px;
-    border: 1px black solid;
-    box-shadow: 0 0 12 px black;
+    /* centrar vertical */
+    min-height: 80vh;
+    /* ocupa casi toda la pantalla */
+    background-color: var(--ivory);
     padding: 2rem;
 }
 
+/* 3. Formulario centrado con borde redondeado */
+.login-form {
+    background-color: var(--olive);
+    padding: 2rem;
+    border-radius: 12px;
+    /* bordes redondeados */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 360px;
+    text-align: center;
+}
+
+/* 4. Inputs redondeados, mismo fondo que la página */
 .login-form input {
-    border-radius: 4px;
-    display: block;
-    margin: 1rem auto;
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--dusk);
+    box-sizing: border-box;
+    border-radius: 8px;
+    /* redondeo suave */
+    background-color: var(--ivory);
+    font-size: 1rem;
+    color: var(--pebble);
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: var(--fern);
+}
+
+/* 5. Mensaje de error en pebble (el más oscuro), no rojo */
+.login-error {
+    margin-top: 0.5rem;
+    color: var(--pebble);
+    font-size: 0.9rem;
+}
+
+/* (y el éxito igual con otro tono de la paleta, si quieres) */
+.login-success {
+    margin-top: 0.5rem;
+    color: var(--fern);
+    font-size: 0.9rem;
+}
+
+/* 6. Botón redondeado, fondo igual al de la página */
+.login-form button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--oat);
+    border: 2px solid var(--oat);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--pebble);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.login-form button:hover {
+    background-color: var(--dusk);
 }

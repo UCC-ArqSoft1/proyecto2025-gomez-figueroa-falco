@@ -1,0 +1,48 @@
+/* Hereda variables de App.css */
+
+/* Contenedor de la página */
+.actividades-page {
+    display: flex;
+    justify-content: center;
+    /* centra el bloque de actividades */
+    align-items: center;
+    /* centra en vertical */
+    min-height: 80vh;
+    background-color: var(--ivory);
+    padding: 2rem;
+}
+
+/* Flex-wrapper que alinea las tarjetas a la izquierda dentro del área centrada */
+.actividades-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 800px;
+}
+
+/* Cada actividad en su propio rectángulo */
+.actividad-card {
+    background-color: var(--oat);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    min-width: 200px;
+    flex: 1 1 200px;
+    /* para que nuevas cards aparezcan a la derecha */
+}
+
+.actividad-card button {
+    background-color: var(--ivory);
+    border: 2px solid var(--fern);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    color: var(--pebble);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.actividad-card button:hover {
+    background-color: var(--dusk);
+}

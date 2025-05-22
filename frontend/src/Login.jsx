@@ -1,3 +1,4 @@
+
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./Login.css";
@@ -63,8 +64,8 @@ const Login = () => {
                     required
                 />
                 <button type="submit">Ingresar</button>
-                {error && <div style={{ color: "red" }}>{error}</div>}
-                {success && <div style={{ color: "green" }}>{success}</div>}
+                {error && <div className="login-error">{error}</div>}
+                {success && <div className="login-success">{success}</div>}
             </form>
         </div>
     )

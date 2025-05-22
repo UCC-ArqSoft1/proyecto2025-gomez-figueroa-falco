@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import './Actividades.css';
 
 const Actividades = () => {
     const [actividades, setActividades] = useState([]);
@@ -19,18 +20,21 @@ const Actividades = () => {
     if (loading) return <div>Cargando actividades...</div>;
 
     return (
-        <div>
-            <h2>Lista de Actividades</h2>
-            <ul>
-                {actividades.map((a) => (
-                    <li key={a.id}>
-                        <strong>{a.nombre}</strong> - {a.descripcion} <br />
-                        Categoría: {a.categoria} | Profesor: {a.profesor}
-                    </li>
+        <div className="actividades-page">
+            <div className="actividades-container">
+                {actividades.map(a => (
+                    <div key={a.id} className="actividad-card">
+                        <h3>{a.nombre}</h3>
+                        <p>{a.descripcion}</p>
+                        <small>
+                            Categoría: {a.categoria} | Profesor: {a.profesor}
+                        </small>
+                    </div>
                 ))}
-            </ul>
+            </div>
         </div>
     );
+
 };
 
 export default Actividades;

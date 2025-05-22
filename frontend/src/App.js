@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./Login";
-import Actividades from "./Actividades"; // lo vas a crear ahora
+import Actividades from "./Actividades";
+import './App.css';
+
 
 function App() {
   return (
