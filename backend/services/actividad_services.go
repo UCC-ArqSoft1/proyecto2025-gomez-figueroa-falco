@@ -27,6 +27,7 @@ func BuscarActividades(q string) ([]dao.Actividad, error) {
 	var acts []dao.Actividad
 	db := clients.DB.Preload("Horarios")
 	if q == "" {
+		// trae todas las actividades
 		return acts, db.Find(&acts).Error
 	}
 	pattern := "%" + q + "%"

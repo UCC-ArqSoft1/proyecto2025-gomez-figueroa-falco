@@ -58,7 +58,7 @@ func init() {
 	})
 	DB.AutoMigrate(&dao.Actividad{})
 	DB.Create(&dao.Actividad{
-		Id:          3,
+		Id:          2,
 		Nombre:      "Running",
 		Descripcion: "Actividad al aire libre, guiada por profesor",
 		Categoria:   "Categoria 2",
