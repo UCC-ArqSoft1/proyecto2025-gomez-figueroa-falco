@@ -46,6 +46,26 @@ func init() {
 		Profesor:    "Profesor 1",
 		Imagen:      "imagen1.jpg",
 	})
+	DB.AutoMigrate(&dao.Actividad{})
+	DB.Create(&dao.Actividad{
+		Id:          2,
+		Nombre:      "Spinning",
+		Descripcion: "Actividad en bici fija, guiada por profesor",
+		Categoria:   "Categoria 1",
+		CupoTotal:   20,
+		Profesor:    "Francisca 1",
+		Imagen:      "imagen1.jpg",
+	})
+	DB.AutoMigrate(&dao.Actividad{})
+	DB.Create(&dao.Actividad{
+		Id:          3,
+		Nombre:      "Running",
+		Descripcion: "Actividad al aire libre, guiada por profesor",
+		Categoria:   "Categoria 2",
+		CupoTotal:   20,
+		Profesor:    "Magdalena Gomez",
+		Imagen:      "imagen1.jpg",
+	})
 	DB.AutoMigrate(&dao.Horario{})
 	DB.Create(&dao.Horario{
 		Id:          1,

@@ -4,37 +4,69 @@ import './Actividades.css';
 const Actividades = () => {
     const [actividades, setActividades] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [busqueda, setBusqueda] = useState("");
 
     useEffect(() => {
         fetch("http://localhost:8080/actividades")
-            .then((res) => res.json())
-            .then((data) => {
+            .then(res => res.json())
+            .then(data => {
                 setActividades(data);
                 setLoading(false);
             })
-            .catch((err) => {
-                setLoading(false);
-            });
+            .catch(() => setLoading(false));
     }, []);
 
     if (loading) return <div>Cargando actividades...</div>;
 
+    const filtradas = actividades.filter(a => {
+        const q = busqueda.toLowerCase();
+        return (
+            a.nombre.toLowerCase().includes(q) ||
+            a.profesor.toLowerCase().includes(q)
+        );
+    });
+
     return (
         <div className="actividades-page">
+            <div className="busqueda-container">
+                <input
+                    type="text"
+                    className="busqueda-input"
+                    placeholder="Buscar actividad por título, horario o profesor"
+                    value={busqueda}
+                    onChange={e => setBusqueda(e.target.value)}
+                />
+            </div>
+
             <div className="actividades-container">
-                {actividades.map(a => (
+                {filtradas.map(a => (
                     <div key={a.id} className="actividad-card">
                         <h3>{a.nombre}</h3>
-                        <p>{a.descripcion}</p>
-                        <small>
-                            Categoría: {a.categoria} | Profesor: {a.profesor}
-                        </small>
+
+                        {/* mostramos todos los horarios */}
+                        {a.horarios?.length > 0 && (
+                            <div className="actividad-horarios">
+                                {a.horarios.map(h => (
+                                    <p key={h.id}>
+                                        {h.dia}{" "}
+                                        {new Date(h.hora_inicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        –
+                                        {new Date(h.hora_fin).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    </p>
+                                ))}
+                            </div>
+                        )}
+
+                        <small>Profesor: {a.profesor}</small>
                     </div>
                 ))}
+
+                {filtradas.length === 0 && (
+                    <p className="sin-resultados">No hay actividades que coincidan.</p>
+                )}
             </div>
         </div>
     );
-
 };
 
 export default Actividades;

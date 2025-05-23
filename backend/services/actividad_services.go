@@ -25,12 +25,12 @@ func GetActividadById(id int) domain.ActividadesDeportivas {
 // devuelve todas las actividades si no se pasa palabra clave
 func BuscarActividades(q string) ([]dao.Actividad, error) {
 	var acts []dao.Actividad
-	db := clients.DB
+	db := clients.DB.Preload("Horarios")
 	if q == "" {
 		return acts, db.Find(&acts).Error
 	}
 	pattern := "%" + q + "%"
-	return acts, db.Where("titulo LIKE ? OR categoria LIKE ?", pattern, pattern).Find(&acts).Error
+	return acts, db.Where("Nombre LIKE ? OR categoria LIKE ?", pattern, pattern).Find(&acts).Error
 }
 
 // InscribirUsuario crea un registro en tabla inscripciones.

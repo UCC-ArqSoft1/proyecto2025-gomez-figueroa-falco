@@ -8,4 +8,6 @@ type Actividad struct {
 	CupoTotal   uint   `gorm:"not null;column:CupoTotal" json:"cupo_total"`
 	Profesor    string `gorm:"size:100;column:Profesor" json:"profesor,omitempty"`
 	Imagen      string `gorm:"size:255;column:Imagen"  json:"imagen,omitempty"`
+
+	Horarios []Horario `gorm:"foreignKey:IdActividad;references:Id" json:"horarios"`
 }
