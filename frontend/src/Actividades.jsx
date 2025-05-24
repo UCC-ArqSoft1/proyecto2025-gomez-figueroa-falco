@@ -18,13 +18,6 @@ const Actividades = () => {
 
     if (loading) return <div>Cargando actividades...</div>;
 
-    const filtradas = actividades.filter(a => {
-        const q = busqueda.toLowerCase();
-        return (
-            a.nombre.toLowerCase().includes(q) ||
-            a.profesor.toLowerCase().includes(q)
-        );
-    });
 
     return (
         <div className="actividades-page">
@@ -39,7 +32,7 @@ const Actividades = () => {
             </div>
 
             <div className="actividades-container">
-                {filtradas.map(a => (
+                {actividades.map(a => (
                     <div key={a.id} className="actividad-card">
                         <h3>{a.nombre}</h3>
 
@@ -61,7 +54,7 @@ const Actividades = () => {
                     </div>
                 ))}
 
-                {filtradas.length === 0 && (
+                {actividades.length === 0 && (
                     <p className="sin-resultados">No hay actividades que coincidan.</p>
                 )}
             </div>
