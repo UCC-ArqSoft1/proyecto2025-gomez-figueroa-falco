@@ -2,6 +2,7 @@ package clients
 
 import (
 	"backend/dao"
+	"crypto/sha256"
 	"fmt"
 	"time"
 
@@ -29,58 +30,107 @@ func init() {
 		panic(fmt.Sprintf("error connecting to DB: %v", err))
 	}
 
-	DB.AutoMigrate(&dao.User{})
-	DB.Create(&dao.User{
-		Id:           1,
-		Username:     "emiliano",
-		PasswordHash: "121j212hs9812sj2189sj",
-	})
+	if err := DB.AutoMigrate(&dao.User{}); err != nil {
+		panic(fmt.Sprintf("Error creating table: %s", err.Error()))
+	}
+	if err := DB.AutoMigrate(&dao.Horario{}); err != nil {
+		panic(fmt.Sprintf("Error creating table: %s", err.Error()))
+	}
+	if err := DB.AutoMigrate(&dao.Actividad{}); err != nil {
+		panic(fmt.Sprintf("Error creating table: %s", err.Error()))
+	}
+	if err := DB.AutoMigrate(&dao.Inscripcion{}); err != nil {
+		panic(fmt.Sprintf("Error creating table: %s", err.Error()))
+	}
 
-	DB.AutoMigrate(&dao.Actividad{})
-	DB.Create(&dao.Actividad{
-		Id:          1,
-		Nombre:      "Actividad 1",
+	hashedPassword := fmt.Sprintf("%x", sha256.Sum256([]byte("admin")))
+
+	if result := DB.Create(&dao.User{
+		Username:     "emiliano",
+		PasswordHash: hashedPassword,
+	}); result.Error != nil {
+		fmt.Println("Error creating user: ", result.Error)
+	}
+
+	if result := DB.Create(&dao.Actividad{
+		Nombre:      "Funcional",
 		Descripcion: "Descripcion de la actividad 1",
 		Categoria:   "Categoria 1",
 		CupoTotal:   10,
-		Profesor:    "Profesor 1",
+		Profesor:    "Juan Cabral",
 		Imagen:      "imagen1.jpg",
-	})
-	DB.AutoMigrate(&dao.Actividad{})
-	DB.Create(&dao.Actividad{
-		Id:          2,
+		Horarios: []dao.Horario{
+			{
+				Dia:         "Lunes",
+				HoraInicio:  time.Now(),
+				HoraFin:     time.Now(),
+				CupoHorario: nil,
+			},
+			{
+				Dia:         "Martes",
+				HoraInicio:  time.Now(),
+				HoraFin:     time.Now(),
+				CupoHorario: nil,
+			},
+		},
+	}); result.Error != nil {
+		fmt.Println("Error creating activity: ", result.Error)
+	}
+
+	if result := DB.Create(&dao.Actividad{
 		Nombre:      "Spinning",
 		Descripcion: "Actividad en bici fija, guiada por profesor",
 		Categoria:   "Categoria 1",
 		CupoTotal:   20,
 		Profesor:    "Francisca 1",
 		Imagen:      "imagen1.jpg",
-	})
-	DB.AutoMigrate(&dao.Actividad{})
-	DB.Create(&dao.Actividad{
-		Id:          2,
+		Horarios: []dao.Horario{
+			{
+				Dia:         "Martes",
+				HoraInicio:  time.Now(),
+				HoraFin:     time.Now(),
+				CupoHorario: nil,
+			},
+			{
+				Dia:         "Jueves",
+				HoraInicio:  time.Now(),
+				HoraFin:     time.Now(),
+				CupoHorario: nil,
+			},
+		},
+	}); result.Error != nil {
+		fmt.Println("Error creating activity: ", result.Error)
+	}
+
+	if result := DB.Create(&dao.Actividad{
 		Nombre:      "Running",
 		Descripcion: "Actividad al aire libre, guiada por profesor",
 		Categoria:   "Categoria 2",
 		CupoTotal:   20,
 		Profesor:    "Magdalena Gomez",
 		Imagen:      "imagen1.jpg",
-	})
-	DB.AutoMigrate(&dao.Horario{})
-	DB.Create(&dao.Horario{
-		Id:          1,
-		IdActividad: 1,
-		Dia:         "Lunes",
-		HoraInicio:  time.Now(),
-		HoraFin:     time.Now(),
-		CupoHorario: nil,
-	})
+		Horarios: []dao.Horario{
+			{
+				Dia:         "Lunes",
+				HoraInicio:  time.Now(),
+				HoraFin:     time.Now(),
+				CupoHorario: nil,
+			},
+			{
+				Dia:         "Miercoles",
+				HoraInicio:  time.Now(),
+				HoraFin:     time.Now(),
+				CupoHorario: nil,
+			},
+		},
+	}); result.Error != nil {
+		fmt.Println("Error creating activity: ", result.Error)
+	}
 
-	DB.AutoMigrate(&dao.Inscripcion{})
 	DB.Create(&dao.Inscripcion{
-		Id:               1,
-		IdUsuario:        1,
-		IdHorario:        1,
+		Dia:              "Lunes",
+		HoraInicio:       time.Now(),
+		HoraFin:          time.Now(),
 		FechaInscripcion: time.Now(),
 	})
 }

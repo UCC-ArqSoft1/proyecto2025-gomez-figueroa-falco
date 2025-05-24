@@ -5,10 +5,10 @@ import (
 )
 
 type Horario struct {
-	Id          uint      `gorm:"primaryKey;column:Id" json:"id"`
-	Dia         string    `gorm:"type:enum('Lun','Mar','Mie','Jue','Vie','Sab','Dom');not null;column:Dia" json:"dia"`
-	HoraInicio  time.Time `gorm:"type:time;not null;column:HoraInicio" json:"hora_inicio"`
-	HoraFin     time.Time `gorm:"type:time;not null;column:HoraFin" json:"hora_fin"`
-	IdActividad uint      `gorm:"not null;column:IdActividad" json:"id_actividad"`
-	CupoHorario *uint     `gorm:"column:CupoHorario" json:"cupo_horario,omitempty"`
+	Id          uint      `gorm:"primaryKey:autoIncrement;column:id"`
+	Dia         string    `gorm:"not null;column:dia"`
+	HoraInicio  time.Time `gorm:"type:time;not null;column:hora_inicio"`
+	HoraFin     time.Time `gorm:"type:time;not null;column:hora_fin"`
+	IdActividad uint      `gorm:"not null;column:id_actividad"`
+	CupoHorario *uint     `gorm:"column:cupo_horario"`
 }

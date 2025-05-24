@@ -4,6 +4,8 @@ import (
 	"backend/clients"
 	"backend/dao"
 	"backend/domain"
+
+	"gorm.io/gorm"
 )
 
 func GetActividadById(id int) domain.ActividadesDeportivas {
@@ -23,22 +25,41 @@ func GetActividadById(id int) domain.ActividadesDeportivas {
 
 // filtra por palabra clave en título o categoría
 // devuelve todas las actividades si no se pasa palabra clave
-func BuscarActividades(q string) ([]dao.Actividad, error) {
+func BuscarActividades(q string) ([]domain.ActividadesDeportivas, error) {
 	var acts []dao.Actividad
 	db := clients.DB.Preload("Horarios")
+	results := make([]domain.ActividadesDeportivas, 0)
+	var err *gorm.DB
 	if q == "" {
 		// trae todas las actividades
-		return acts, db.Find(&acts).Error
+		err = db.Find(&acts)
+	} else {
+		pattern := "%" + q + "%"
+		err = db.Where("Nombre LIKE ? OR categoria LIKE ?", pattern, pattern).Find(&acts)
 	}
-	pattern := "%" + q + "%"
-	return acts, db.Where("Nombre LIKE ? OR categoria LIKE ?", pattern, pattern).Find(&acts).Error
+	if err.Error != nil {
+		return nil, err.Error
+	}
+
+	for _, actDAO := range acts {
+		results = append(results, domain.ActividadesDeportivas{
+			Id:          actDAO.Id,
+			Nombre:      actDAO.Nombre,
+			Descripcion: actDAO.Descripcion,
+			Categoria:   actDAO.Categoria,
+			CupoTotal:   actDAO.CupoTotal,
+			Profesor:    actDAO.Profesor,
+			Imagen:      actDAO.Imagen,
+		})
+	}
+	return results, nil
 }
 
-// InscribirUsuario crea un registro en tabla inscripciones.
+/** InscribirUsuario crea un registro en tabla inscripciones.
 func InscribirUsuario(userID, horarioID uint) error {
 	ins := dao.Inscripcion{IdUsuario: userID, IdHorario: horarioID}
 	return clients.DB.Create(&ins).Error
-}
+}*/
 
 func ActividadesDeUsuario(userID uint) ([]dao.Actividad, error) {
 	var acts []dao.Actividad

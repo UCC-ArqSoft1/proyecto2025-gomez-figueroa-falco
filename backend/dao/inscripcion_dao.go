@@ -5,8 +5,9 @@ import (
 )
 
 type Inscripcion struct {
-	Id               uint      `gorm:"primaryKey;column:Id" json:"id"`
-	IdUsuario        uint      `gorm:"not null;column:IdUsuario" json:"id_usuario"`
-	IdHorario        uint      `gorm:"not null;column:IdHorario" json:"id_horario"`
-	FechaInscripcion time.Time `gorm:"column:FechaInscripcion;autoCreateTime" json:"fecha_inscripcion"`
+	Id               uint      `gorm:"primaryKey:autIncrement;column:id"`
+	Dia              string    `gorm:"not null;column:dia"`
+	HoraInicio       time.Time `gorm:"type:time;not null;column:hora_inicio"`
+	HoraFin          time.Time `gorm:"type:time;not null;column:hora_fin"`
+	FechaInscripcion time.Time `gorm:"column:fecha_inscripcion;autoCreateTime"`
 }

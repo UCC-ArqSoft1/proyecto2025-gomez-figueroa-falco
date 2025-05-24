@@ -39,7 +39,7 @@ type inscripcionBody struct {
 	ActividadID uint `json:"actividadId"`
 }
 
-func Inscribirse(ctx *gin.Context) {
+/*func Inscribirse(ctx *gin.Context) {
 	var body inscripcionBody
 	if err := ctx.BindJSON(&body); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
@@ -52,7 +52,7 @@ func Inscribirse(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusCreated, gin.H{"msg": "Inscripcion exitosa"})
-}
+}*/
 
 func MisActividades(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("userId"))

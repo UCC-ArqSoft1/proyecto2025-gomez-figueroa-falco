@@ -26,7 +26,7 @@ func main() {
 
 	router.GET("/actividades", controllers.GetActividades)
 	router.GET("/actividad/:id", controllers.GetActividadById)
-	router.POST("/inscripcion", controllers.Inscribirse)
+	/*router.POST("/inscripcion", controllers.Inscribirse)*/
 	router.GET("/misActividades/:userId", controllers.MisActividades)
 
 	router.POST("/login", controllers.Login)

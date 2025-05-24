@@ -5,12 +5,12 @@ import (
 )
 
 type Inscripcion struct {
-	Id               uint      `gorm:"primaryKey;column:Id" json:"id"`
-	IdUsuario        uint      `gorm:"not null;column:IdUsuario" json:"id_usuario"`
-	IdHorario        uint      `gorm:"not null;column:IdHorario" json:"id_horario"`
-	FechaInscripcion time.Time `gorm:"column:FechaInscripcion;autoCreateTime" json:"fecha_inscripcion"`
+	Id               uint      `json:"id"`
+	IdUsuario        uint      `json:"id_usuario"`
+	IdHorario        uint      `json:"id_horario"`
+	FechaInscripcion time.Time `json:"fecha_inscripcion"`
 
 	// Relaciones
-	Usuario User    `gorm:"foreignKey:IdUsuario"`
-	Horario Horario `gorm:"foreignKey:IdHorario"`
+	Usuario User
+	Horario Horario
 }
