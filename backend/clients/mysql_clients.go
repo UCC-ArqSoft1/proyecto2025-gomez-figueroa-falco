@@ -27,20 +27,20 @@ func init() {
 	var err error
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic(fmt.Sprintf("error connecting to DB: %v", err))
+		panic(fmt.Sprintf("Error conectando a la base de datos: %v", err))
 	}
 
 	if err := DB.AutoMigrate(&dao.User{}); err != nil {
-		panic(fmt.Sprintf("Error creating table: %s", err.Error()))
+		panic(fmt.Sprintf("Error creando tabla: %s", err.Error()))
 	}
 	if err := DB.AutoMigrate(&dao.Horario{}); err != nil {
-		panic(fmt.Sprintf("Error creating table: %s", err.Error()))
+		panic(fmt.Sprintf("Error creando tabla: %s", err.Error()))
 	}
 	if err := DB.AutoMigrate(&dao.Actividad{}); err != nil {
-		panic(fmt.Sprintf("Error creating table: %s", err.Error()))
+		panic(fmt.Sprintf("Error creando tabla: %s", err.Error()))
 	}
 	if err := DB.AutoMigrate(&dao.Inscripcion{}); err != nil {
-		panic(fmt.Sprintf("Error creating table: %s", err.Error()))
+		panic(fmt.Sprintf("Error creando tabla: %s", err.Error()))
 	}
 
 	hashedPassword := fmt.Sprintf("%x", sha256.Sum256([]byte("admin")))
@@ -49,7 +49,7 @@ func init() {
 		Username:     "emiliano",
 		PasswordHash: hashedPassword,
 	}); result.Error != nil {
-		fmt.Println("Error creating user: ", result.Error)
+		fmt.Println("Error creando usuario: ", result.Error)
 	}
 
 	if result := DB.Create(&dao.Actividad{
@@ -74,7 +74,7 @@ func init() {
 			},
 		},
 	}); result.Error != nil {
-		fmt.Println("Error creating activity: ", result.Error)
+		fmt.Println("Error creando actividad: ", result.Error)
 	}
 
 	if result := DB.Create(&dao.Actividad{
@@ -99,7 +99,7 @@ func init() {
 			},
 		},
 	}); result.Error != nil {
-		fmt.Println("Error creating activity: ", result.Error)
+		fmt.Println("Error creando actividad: ", result.Error)
 	}
 
 	if result := DB.Create(&dao.Actividad{
@@ -124,7 +124,7 @@ func init() {
 			},
 		},
 	}); result.Error != nil {
-		fmt.Println("Error creating activity: ", result.Error)
+		fmt.Println("Error creando actividad: ", result.Error)
 	}
 
 	DB.Create(&dao.Inscripcion{

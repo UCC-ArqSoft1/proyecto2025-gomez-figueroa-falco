@@ -104,11 +104,36 @@ func CrearActividadConHorario(input dto.ActividadConHorarioRequest) error {
 			CupoHorario: input.Horario.CupoHorario,
 			IdActividad: actividad.Id,
 		}
-
 		if err := tx.Create(&horario).Error; err != nil {
 			return err
 		}
 		return nil
 	})
+}
 
+func ActualizarActividad(id uint, input dto.ActividadConHorarioRequest) error {
+	db := clients.DB
+
+	// Buscar la actividad por ID
+	var actividad dao.Actividad
+	if err := db.First(&actividad, id).Error; err != nil {
+		return errors.New("actividad no encontrada")
+	}
+
+	// Actualizar los campos de la actividad
+	actividad.Nombre = input.Nombre
+	actividad.Descripcion = input.Descripcion
+	actividad.Categoria = input.Categoria
+	actividad.Profesor = input.Profesor
+	actividad.Imagen = input.Imagen
+	actividad.CupoTotal = input.CupoTotal
+
+	return db.Save(&actividad).Error
+}
+func EliminarActividad(id uint) error {
+	db := clients.DB
+	if err := db.Delete(&dao.Actividad{}, id).Error; err != nil {
+		return errors.New("error al eliminar actividad: " + err.Error())
+	}
+	return nil
 }

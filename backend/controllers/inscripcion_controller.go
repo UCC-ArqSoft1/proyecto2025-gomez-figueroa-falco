@@ -18,7 +18,7 @@ type inscripcionBody struct {
 func Inscribirse(ctx *gin.Context) {
 	var body inscripcionBody
 	if err := ctx.BindJSON(&body); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Datos inválidos"})
 		return
 	}
 

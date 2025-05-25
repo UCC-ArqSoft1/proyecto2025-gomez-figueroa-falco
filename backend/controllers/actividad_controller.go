@@ -69,3 +69,48 @@ func CrearActividad(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusCreated, gin.H{"msg": "Actividad creada"})
 }
+
+func EditarActividad(ctx *gin.Context) {
+	rol, ok := ctx.Get("rol")
+	if !ok || rol != "admin" {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "No autorizado"})
+		return
+	}
+	idStr := ctx.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Id inválido"})
+		return
+	}
+
+	var input dto.ActividadConHorarioRequest
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Datos inválidos"})
+		return
+	}
+
+	if err := services.ActualizarActividad(uint(id), input); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"msg": "Actividad editada"})
+}
+
+func EliminarActividad(ctx *gin.Context) {
+	rol, ok := ctx.Get("rol")
+	if !ok || rol != "admin" {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "No autorizado"})
+		return
+	}
+	idStr := ctx.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Id inválido"})
+		return
+	}
+	if err := services.EliminarActividad(uint(id)); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"msg": "Actividad eliminada"})
+}

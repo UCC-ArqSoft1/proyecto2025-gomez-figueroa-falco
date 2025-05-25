@@ -12,14 +12,14 @@ func Login(c *gin.Context) {
 	// Bind the request body to the LoginDTO struct
 	var loginDTO domain.LoginDTO
 	if err := c.ShouldBindJSON(&loginDTO); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Datos inválidos"})
 		return
 	}
 
 	// Call the Login function from the services package
 	token, err := services.Login(loginDTO.Username, loginDTO.Password)
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Credenciales inválidas"})
 		return
 	}
 

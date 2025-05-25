@@ -2,11 +2,10 @@ package main
 
 import (
 	"backend/controllers"
-
-	"github.com/gin-contrib/cors"
-
+	"backend/middleware"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,6 +29,11 @@ func main() {
 	router.GET("/misActividades/:userId", controllers.MisActividades)
 
 	router.POST("/login", controllers.Login)
+
+	// Rutas protegidas para administrador
+	router.POST("/actividades", middleware.AuthMiddleware(), controllers.CrearActividad)
+	router.PUT("/actividades/:id", middleware.AuthMiddleware(), controllers.EditarActividad)
+	router.DELETE("/actividades/:id", middleware.AuthMiddleware(), controllers.EliminarActividad)
 
 	router.Run(":8080")
 
