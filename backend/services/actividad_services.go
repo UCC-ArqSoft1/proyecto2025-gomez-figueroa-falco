@@ -55,11 +55,17 @@ func BuscarActividades(q string) ([]domain.ActividadesDeportivas, error) {
 	return results, nil
 }
 
-/** InscribirUsuario crea un registro en tabla inscripciones.
+// InscribirUsuario crea un registro en tabla inscripciones.
 func InscribirUsuario(userID, horarioID uint) error {
-	ins := dao.Inscripcion{IdUsuario: userID, IdHorario: horarioID}
-	return clients.DB.Create(&ins).Error
-}*/
+	ins := dao.Inscripcion{
+		IdUsuario: userID,
+		IdHorario: horarioID,
+	}
+	if err := clients.DB.Create(&ins).Error; err != nil {
+		return err
+	}
+	return nil
+}
 
 func ActividadesDeUsuario(userID uint) ([]dao.Actividad, error) {
 	var acts []dao.Actividad
