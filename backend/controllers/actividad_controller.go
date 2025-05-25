@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"backend/dto"
 	"backend/services"
 	"net/http"
 	"strconv"
@@ -33,6 +34,7 @@ func GetActividades(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, acts)
 }
 
+// GET /misActividades/:userId
 func MisActividades(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("userId"))
 	if err != nil {
@@ -45,4 +47,25 @@ func MisActividades(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, acts)
+}
+
+func CrearActividad(ctx *gin.Context) {
+	//Validar rol desde el token
+	rol, ok := ctx.Get("rol")
+	if !ok || rol != "admin" {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "No autorizado"})
+		return
+	}
+
+	var input dto.ActividadConHorarioRequest
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Datos inválidos"})
+		return
+	}
+
+	if err := services.CrearActividadConHorario(input); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusCreated, gin.H{"msg": "Actividad creada"})
 }

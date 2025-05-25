@@ -7,6 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// POST /inscripcion   body: { "userId": 1, "actividadId": 3 }
+// Inscribirse maneja la inscripción de un usuario a un horario específico.
+// El cuerpo de la solicitud debe contener el ID del usuario y el ID del horario.
 type inscripcionBody struct {
 	UserID    uint `json:"user_id"`
 	HorarioID uint `json:"horario_id"`
@@ -19,7 +22,7 @@ func Inscribirse(ctx *gin.Context) {
 		return
 	}
 
-	if err := services.InscribirUsuario(body.UserID, body.horarioID) err != nil {
+	if err := services.InscribirUsuario(body.UserID, body.HorarioID); err != nil {
 		switch err.Error() {
 		case "usuario no encontrado":
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Usuario no existe"})

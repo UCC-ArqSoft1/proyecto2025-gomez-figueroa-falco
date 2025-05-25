@@ -4,6 +4,9 @@ import (
 	"backend/clients"
 	"backend/dao"
 	"backend/domain"
+	"backend/dto"
+	"errors"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -63,4 +66,49 @@ func ActividadesDeUsuario(userID uint) ([]dao.Actividad, error) {
 		Where("inscripciones.IdUsuario = ?", userID).
 		Find(&acts)
 	return acts, err.Error
+}
+
+func CrearActividadConHorario(input dto.ActividadConHorarioRequest) error {
+	db := clients.DB
+
+	return db.Transaction(func(tx *gorm.DB) error {
+		// Crear la actividad
+		actividad := dao.Actividad{
+			Nombre:      input.Nombre,
+			Descripcion: input.Descripcion,
+			Categoria:   input.Categoria,
+			Profesor:    input.Profesor,
+			Imagen:      input.Imagen,
+			CupoTotal:   input.CupoTotal,
+		}
+		if err := tx.Create(&actividad).Error; err != nil {
+			return err
+		}
+
+		//Parsear hora de inicio y fin
+		layout := "15:04"
+		horaInicio, err := time.Parse(layout, input.Horario.HoraInicio)
+		if err != nil {
+			return errors.New("error al parsear hora de inicio: " + err.Error())
+		}
+		horaFin, err := time.Parse(layout, input.Horario.HoraFin)
+		if err != nil {
+			return errors.New("error al parsear hora de fin: " + err.Error())
+		}
+
+		// Crear el horario
+		horario := dao.Horario{
+			Dia:         input.Horario.Dia,
+			HoraInicio:  horaInicio,
+			HoraFin:     horaFin,
+			CupoHorario: input.Horario.CupoHorario,
+			IdActividad: actividad.Id,
+		}
+
+		if err := tx.Create(&horario).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+
 }
