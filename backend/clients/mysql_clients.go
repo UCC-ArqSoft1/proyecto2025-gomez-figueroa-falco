@@ -16,7 +16,7 @@ var (
 
 func init() {
 	user := "root"
-	password := "1234"
+	password := "Base041104"
 	host := "localhost"
 	port := 3306
 	database := "backend"

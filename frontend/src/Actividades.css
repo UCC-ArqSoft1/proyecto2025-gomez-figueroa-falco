@@ -73,3 +73,21 @@
     color: var(--pebble);
     margin-top: 1rem;
 }
+
+.detalle-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--fern);
+    color: var(--pebble);
+    float: right;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.detalle-btn:hover {
+    background-color: var(--dusk);
+    color: var(--fern);
+}

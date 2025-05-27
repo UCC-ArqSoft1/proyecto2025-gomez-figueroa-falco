@@ -61,8 +61,8 @@ func BuscarActividades(q string) ([]domain.ActividadesDeportivas, error) {
 func ActividadesDeUsuario(userID uint) ([]dao.Actividad, error) {
 	var acts []dao.Actividad
 	err := clients.DB.
-		Joins("JOIN inscripciones ON inscripciones.IdHorario = horarios.Id").
 		Joins("JOIN horarios       ON horarios.IdActividad = actividades.Id").
+		Joins("JOIN inscripciones ON inscripciones.IdHorario = horarios.Id").
 		Where("inscripciones.IdUsuario = ?", userID).
 		Find(&acts)
 	return acts, err.Error
