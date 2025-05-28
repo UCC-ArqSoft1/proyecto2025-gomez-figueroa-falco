@@ -11,8 +11,10 @@ import (
 // Inscribirse maneja la inscripción de un usuario a un horario específico.
 // El cuerpo de la solicitud debe contener el ID del usuario y el ID del horario.
 type inscripcionBody struct {
-	UserID    uint `json:"user_id"`
-	HorarioID uint `json:"horario_id"`
+	UserID      uint   `json:"userId" binding:"required"`
+	Dia         string `json:"dia" binding:"required"`
+	HorarioID   uint   `json:"horarioId" binding:"required"`
+	ActividadID uint   `json:"actividadId" binding:"required"`
 }
 
 func Inscribirse(ctx *gin.Context) {
