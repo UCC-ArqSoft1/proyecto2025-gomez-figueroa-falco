@@ -1,0 +1,53 @@
+/* src/pages/MisActividades.css */
+.mis-actividades-page {
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+}
+
+.mis-actividades-page h2 {
+    margin-bottom: 1rem;
+}
+
+.mis-actividades-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.actividad-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.actividad-horarios p {
+    margin: 0.25rem 0;
+    font-size: 0.9rem;
+}
+
+.detalle-btn,
+.back-btn {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.detalle-btn {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.back-btn {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.detalle-btn:hover,
+.back-btn:hover {
+    opacity: 0.9;
+}

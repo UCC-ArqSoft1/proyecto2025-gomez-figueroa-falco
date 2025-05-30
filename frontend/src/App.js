@@ -3,6 +3,7 @@ import Login from "./Login";
 import Actividades from "./Actividades";
 import './App.css';
 import ActividadDetalle from "./ActividadDetalle";
+import MisActividades from "./MisActividades";
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/actividades" element={<Actividades />} />
         <Route path="/actividad/:id" element={<ActividadDetalle />} />
+        <Route path="/mis-actividades" element={<MisActividades />} />
       </Routes>
     </Router>
   );

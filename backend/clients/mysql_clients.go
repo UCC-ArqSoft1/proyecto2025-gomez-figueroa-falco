@@ -16,7 +16,7 @@ var (
 
 func init() {
 	user := "root"
-	password := "1234"
+	password := "Base041104"
 	host := "localhost"
 	port := 3306
 	database := "backend"
@@ -127,12 +127,6 @@ func init() {
 		fmt.Println("Error creando actividad: ", result.Error)
 	}
 
-	DB.Create(&dao.Inscripcion{
-		Dia:              "Lunes",
-		HoraInicio:       time.Now(),
-		HoraFin:          time.Now(),
-		FechaInscripcion: time.Now(),
-	})
 }
 
 func GetUserByUsername(username string) dao.User {

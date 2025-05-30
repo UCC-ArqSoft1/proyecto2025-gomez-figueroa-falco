@@ -8,7 +8,7 @@ import (
 )
 
 // InscribirUsuario crea un registro en tabla inscripciones.
-func InscribirUsuario(userID, horarioID uint) error {
+func InscribirUsuario(userID, horarioID, actividadID uint, dia string) error {
 	db := clients.DB
 
 	// Verificar si el usuario existe
@@ -41,8 +41,12 @@ func InscribirUsuario(userID, horarioID uint) error {
 	// Crear la inscripción
 	// Si el cupo es mayor a 0, se crea la inscripción
 	ins := dao.Inscripcion{
+		Dia:              dia,                // <-- del body
+		HoraInicio:       horario.HoraInicio, // <-- del registro horario
+		HoraFin:          horario.HoraFin,
 		IdUsuario:        userID,
 		IdHorario:        horarioID,
+		IdActividad:      actividadID,
 		FechaInscripcion: time.Now(), // Asignar la fecha actual
 	}
 	if err := db.Create(&ins).Error; err != nil {

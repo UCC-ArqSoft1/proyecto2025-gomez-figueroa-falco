@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
 type inscripcionBody struct {
 	UserID      uint   `json:"userId" binding:"required"`
 	Dia         string `json:"dia" binding:"required"`
@@ -22,7 +21,7 @@ func Inscribirse(ctx *gin.Context) {
 		return
 	}
 
-	if err := services.InscribirUsuario(body.UserID, body.HorarioID); err != nil {
+	if err := services.InscribirUsuario(body.UserID, body.HorarioID, body.ActividadID, body.Dia); err != nil {
 		switch err.Error() {
 		case "usuario no encontrado":
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Usuario no existe"})

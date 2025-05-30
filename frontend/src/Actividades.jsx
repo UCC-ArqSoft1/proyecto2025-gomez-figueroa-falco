@@ -1,11 +1,14 @@
+// src/components/Actividades.jsx
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom"
-import './Actividades.css';
+import { Link } from "react-router-dom";
+import "./Actividades.css";
 
 const Actividades = () => {
     const [actividades, setActividades] = useState([]);
     const [loading, setLoading] = useState(true);
     const [busqueda, setBusqueda] = useState("");
+
+    const rol = localStorage.getItem("rol");
 
     useEffect(() => {
         fetch("http://localhost:8080/actividades")
@@ -19,7 +22,6 @@ const Actividades = () => {
 
     if (loading) return <div>Cargando actividades...</div>;
 
-
     return (
         <div className="actividades-page">
             <div className="busqueda-container">
@@ -30,6 +32,13 @@ const Actividades = () => {
                     value={busqueda}
                     onChange={e => setBusqueda(e.target.value)}
                 />
+
+                {/* Enlace a la página "Mis actividades" */}
+                {rol === "SOCIO" && (
+                    <Link to="/mis-actividades" className="mis-actividades-link">
+                        Mis actividades
+                    </Link>
+                )}
             </div>
 
             <div className="actividades-container">
@@ -37,24 +46,29 @@ const Actividades = () => {
                     <div key={a.id} className="actividad-card">
                         <h3>{a.nombre}</h3>
 
-                        {/* mostramos todos los horarios */}
                         {a.horarios?.length > 0 && (
                             <div className="actividad-horarios">
                                 {a.horarios.map(h => (
                                     <p key={h.id}>
                                         {h.dia}{" "}
-                                        {new Date(h.hora_inicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        –
-                                        {new Date(h.hora_fin).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        {new Date(h.hora_inicio).toLocaleTimeString([], {
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                        })}
+                                        –{" "}
+                                        {new Date(h.hora_fin).toLocaleTimeString([], {
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                        })}
                                     </p>
                                 ))}
                             </div>
                         )}
 
                         <small>Profesor: {a.profesor}</small>
-                        {/* botón detalle */}
                         <Link to={`/actividad/${a.id}`} className="detalle-btn">
-                            Detalle           </Link>
+                            Detalle
+                        </Link>
                     </div>
                 ))}
 
