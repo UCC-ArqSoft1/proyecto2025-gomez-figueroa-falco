@@ -35,7 +35,7 @@ func GenerateToken(UserId uint, rol string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	//firmar el token
-	signed, err := token.SignedString([]byte("secret"))
+	signed, err := token.SignedString([]byte(jwtKey)) // usar la clave secreta del entorno
 
 	//valida el error
 	if err != nil {
