@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import "./MisActividades.css";
 
 const MisActividades = () => {
-    const [misAct, setMisAct] = useState([]);     // siempre arranque como arreglo
+    const [misAct, setMisAct] = useState([]);
     const [loading, setLoading] = useState(true);
     const userId = Number(localStorage.getItem("userId"));
 
@@ -12,19 +11,9 @@ const MisActividades = () => {
             try {
                 const res = await fetch(`http://localhost:8080/misActividades/${userId}`);
                 const data = await res.json();
-
-                if (!res.ok) {
-                    // Si el backend devolvió { error: "…" }
-                    console.error("Error fetching misActividades:", data.error || data);
-                    setMisAct([]);            // o manejar el mensaje de error como quieras
-                } else if (Array.isArray(data)) {
-                    setMisAct(data);          // aquí ya sabemos que es un arreglo
-                } else {
-                    console.warn("misActividades no es un array:", data);
-                    setMisAct([]);            // caída suave
-                }
+                setMisAct(Array.isArray(data) ? data : []);
             } catch (e) {
-                console.error("Network error:", e);
+                console.error(e);
                 setMisAct([]);
             } finally {
                 setLoading(false);
@@ -36,31 +25,32 @@ const MisActividades = () => {
         return <div className="mis-actividades-page">Cargando mis actividades…</div>;
     }
 
-    // Con la comprobación, podemos usar map sin miedo
-    const lista = Array.isArray(misAct) ? misAct : [];
-
     return (
         <div className="mis-actividades-page">
             <h2>Mis actividades inscritas</h2>
-
-            {lista.length === 0 ? (
+            {misAct.length === 0 ? (
                 <p>No estás inscrito en ninguna actividad.</p>
             ) : (
                 <div className="mis-actividades-list">
-                    {lista.map(a => (
-                        <div key={a.id} className="actividad-card">
-                            <h3>{a.nombre}</h3>
-                            {a.horarios?.length > 0 && (
+                    {misAct.map(a => (
+                        <div key={a.Id} className="actividad-card">
+                            {/* Usamos PascalCase que proviene del JSON GORM */}
+                            <h3 className="actividad-nombre">{a.Nombre}</h3>
+                            <p className="actividad-profesor">
+                                <strong>Profesor:</strong> {a.Profesor}
+                            </p>
+
+                            {/* Horarios también en PascalCase */}
+                            {a.Horarios?.length > 0 && (
                                 <div className="actividad-horarios">
-                                    {a.horarios.map(h => (
-                                        <p key={h.id}>
-                                            {h.dia}{" "}
-                                            {new Date(h.hora_inicio).toLocaleTimeString([], {
+                                    {a.Horarios.map(h => (
+                                        <p key={h.Id} className="horario-item">
+                                            <strong>{h.Dia}:</strong>{" "}
+                                            {new Date(h.HoraInicio).toLocaleTimeString([], {
                                                 hour: "2-digit",
                                                 minute: "2-digit",
-                                            })}
-                                            –{" "}
-                                            {new Date(h.hora_fin).toLocaleTimeString([], {
+                                            })} –{" "}
+                                            {new Date(h.HoraFin).toLocaleTimeString([], {
                                                 hour: "2-digit",
                                                 minute: "2-digit",
                                             })}
@@ -68,18 +58,16 @@ const MisActividades = () => {
                                     ))}
                                 </div>
                             )}
-                            <small>Profesor: {a.profesor}</small>
-                            <Link to={`/actividad/${a.id}`} className="detalle-btn">
-                                Detalle
-                            </Link>
                         </div>
                     ))}
                 </div>
             )}
-
-            <Link to="/actividades" className="back-btn">
+            <button
+                className="back-btn"
+                onClick={() => (window.location.href = "/actividades")}
+            >
                 ← Volver a todas las actividades
-            </Link>
+            </button>
         </div>
     );
 };

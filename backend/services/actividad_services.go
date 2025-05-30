@@ -74,12 +74,13 @@ func BuscarActividades(q string) ([]domain.ActividadesDeportivas, error) {
 
 func ActividadesDeUsuario(userID uint) ([]dao.Actividad, error) {
 	var acts []dao.Actividad
-	err := clients.DB.
-		Joins("JOIN horarios       ON horarios.IdActividad = actividades.Id").
-		Joins("JOIN inscripciones ON inscripciones.IdHorario = horarios.Id").
-		Where("inscripciones.IdUsuario = ?", userID).
+	db := clients.DB.
+		Preload("Horarios").
+		Joins("JOIN horarios     ON horarios.id_actividad   = actividads.id").
+		Joins("JOIN inscripcions ON inscripcions.id_horario = horarios.id").
+		Where("inscripcions.id_usuario = ?", userID).
 		Find(&acts)
-	return acts, err.Error
+	return acts, db.Error
 }
 
 func CrearActividadConHorario(input dto.ActividadConHorarioRequest) error {
