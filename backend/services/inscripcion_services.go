@@ -23,6 +23,10 @@ func InscribirUsuario(userID, horarioID uint) error {
 		return errors.New("horario no existe: " + err.Error())
 	}
 
+	if horario.CupoHorario == nil {
+		horario.CupoHorario = new(uint) // reservar memoria para el cupo
+		*horario.CupoHorario = 1        //cupo inicial mínimo
+	}
 	//Verificar si el usuario ya está inscrito en el horario
 	var inscrpcionExistente dao.Inscripcion
 	if err := db.Where("id_usuario = ? AND id_horario = ?", userID, horarioID).First(&inscrpcionExistente).Error; err == nil {
@@ -45,7 +49,7 @@ func InscribirUsuario(userID, horarioID uint) error {
 		return errors.New("error al crear inscripción: " + err.Error())
 	}
 	//Reducir en 1 el cupo disponible
-	*horario.CupoHorario -= 1
+	*horario.CupoHorario--
 
 	if err := db.Save(&horario).Error; err != nil {
 		return errors.New("error al actualizar cupo horario: " + err.Error())

@@ -4,32 +4,45 @@ import (
 	"backend/clients"
 	"crypto/sha256"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateToken(userId uint) (string, error) {
-	claims := jwt.RegisteredClaims{
-		ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)), // 24 horas de expiracion
-		IssuedAt:  jwt.NewNumericDate(time.Now()),                     // fecha de emision
-		Issuer:    "backend",                                          // emisor
-		Subject:   "auth",                                             // asunto
-		ID:        fmt.Sprintf("%d", userId),                          // id del usuario
+type CustomClaims struct {
+	UserId uint   `json:"userId"`
+	Rol    string `json:"rol"`
+	jwt.RegisteredClaims
+}
 
+var jwtKey = []byte(os.Getenv("JWT_SECRET"))
+
+func GenerateToken(UserId uint, rol string) (string, error) {
+	claims := CustomClaims{
+		UserId: UserId, // id del usuario
+		Rol:    rol,    // rol del usuario
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)), // 24 horas de expiracion
+			IssuedAt:  jwt.NewNumericDate(time.Now()),                     // fecha de emision
+			Issuer:    "backend",                                          // emisor
+			Subject:   "auth",                                             // asunto
+			ID:        fmt.Sprintf("%d", UserId),                          // id del usuario
+
+		},
 	}
 	//crear token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	//firmar el token
-	tokenString, err := token.SignedString([]byte("secret"))
+	signed, err := token.SignedString([]byte("secret"))
 
 	//valida el error
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("error firmando JWT: %w", err)
 	}
 	//vuelve el token
-	return tokenString, nil
+	return signed, nil
 }
 
 func Login(username string, password string) (string, error) {
@@ -49,7 +62,7 @@ func Login(username string, password string) (string, error) {
 		return "", fmt.Errorf("contraseña incorrecta")
 	}
 	// Generate JWT token
-	token, err := GenerateToken(user.Id)
+	token, err := GenerateToken(user.Id, user.Rol)
 	if err != nil {
 		fmt.Println("Error generating token:", err)
 		return "", err

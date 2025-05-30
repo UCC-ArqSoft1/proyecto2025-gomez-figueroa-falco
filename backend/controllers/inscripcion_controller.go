@@ -7,9 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// POST /inscripcion   body: { "userId": 1, "actividadId": 3 }
-// Inscribirse maneja la inscripción de un usuario a un horario específico.
-// El cuerpo de la solicitud debe contener el ID del usuario y el ID del horario.
+
 type inscripcionBody struct {
 	UserID      uint   `json:"userId" binding:"required"`
 	Dia         string `json:"dia" binding:"required"`

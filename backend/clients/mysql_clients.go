@@ -16,7 +16,7 @@ var (
 
 func init() {
 	user := "root"
-	password := "Base041104"
+	password := "1234"
 	host := "localhost"
 	port := 3306
 	database := "backend"
@@ -45,7 +45,7 @@ func init() {
 
 	hashedPassword := fmt.Sprintf("%x", sha256.Sum256([]byte("admin")))
 
-	if result := DB.Create(&dao.User{
+	if result := DB.FirstOrCreate(&dao.User{
 		Username:     "emiliano",
 		PasswordHash: hashedPassword,
 	}); result.Error != nil {

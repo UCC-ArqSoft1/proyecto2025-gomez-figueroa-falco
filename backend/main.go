@@ -11,6 +11,10 @@ import (
 
 func main() {
 
+	gin.SetMode(gin.ReleaseMode)
+	r := gin.Default()
+	r.SetTrustedProxies(nil)
+
 	router := gin.Default()
 	router.Use(cors.Default())
 
