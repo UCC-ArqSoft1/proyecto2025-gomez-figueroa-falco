@@ -49,6 +49,9 @@ const ActividadDetalle = () => {
 
     if (loading) return <div>Cargando detalle…</div>;
     if (!act) return <div>Actividad no encontrada</div>;
+    // ...dentro de ActividadDetalle, justo antes del return:
+    console.log("ROL desde localStorage:", rol);
+
 
     return (
         <div className="actividad-detalle-page">
