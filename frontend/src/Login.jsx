@@ -28,7 +28,11 @@ const Login = () => {
             const data = await res.json();
 
             if (res.ok && data.token) {
-                localStorage.setItem("token", data.token); // Guarda el token si querés usarlo después
+                localStorage.setItem("token", data.token);
+                // decodificar y guardar userId y rol
+                const payload = JSON.parse(atob(data.token.split('.')[1]));
+                localStorage.setItem("userId", payload.userId);
+                localStorage.setItem("rol", payload.rol); // Guarda el token si querés usarlo después
                 setSuccess("¡Login correcto!");
                 setError("");
 

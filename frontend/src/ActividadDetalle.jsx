@@ -7,6 +7,9 @@ const ActividadDetalle = () => {
     const [act, setAct] = useState(null);
     const [loading, setLoad] = useState(true);
 
+    const userId = Number(localStorage.getItem("userId"));
+    const rol = localStorage.getItem("rol");
+
     useEffect(() => {
         fetch(`http://localhost:8080/actividad/${id}`)
             .then(r => r.json())
@@ -16,6 +19,33 @@ const ActividadDetalle = () => {
             })
             .catch(() => setLoad(false));
     }, [id]);
+
+    const handleInscribirse = async (horarioId, dia) => {
+        try {
+            const res = await fetch(
+                `http://localhost:8080/inscripcion`,
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        userId,
+                        actividadId: act.id,
+                        horarioId,
+                        dia
+                    })
+                }
+            );
+            const data = await res.json();
+            if (res.ok) {
+                alert(data.msg);
+            } else {
+                alert(data.error);
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Error al inscribirse");
+        }
+    };
 
     if (loading) return <div>Cargando detalle…</div>;
     if (!act) return <div>Actividad no encontrada</div>;
@@ -34,20 +64,31 @@ const ActividadDetalle = () => {
                     <div className="detalle-horarios">
                         <h3>Horarios</h3>
                         {act.horarios.map(h => (
-                            <p key={h.id}>
-                                {h.dia}{" "}
-                                {new Date(h.hora_inicio).toLocaleTimeString([], {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                })} –{" "}
-                                {new Date(h.hora_fin).toLocaleTimeString([], {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                })}
-                            </p>
+                            <div key={h.id} className="detalle-horario-item">
+                                <p>
+                                    {h.dia}{" "}
+                                    {new Date(h.hora_inicio).toLocaleTimeString([], {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                    })} –{" "}
+                                    {new Date(h.hora_fin).toLocaleTimeString([], {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                    })}
+                                </p>
+                                {rol === "SOCIO" && (
+                                    <button
+                                        className="inscribir-btn"
+                                        onClick={() => handleInscribirse(h.id, h.dia)}
+                                    >
+                                        Inscribirse
+                                    </button>
+                                )}
+                            </div>
                         ))}
                     </div>
                 )}
+
                 <Link to="/actividades" className="detalle-back">
                     ← Volver
                 </Link>
