@@ -11,10 +11,6 @@ import (
 
 func main() {
 
-	gin.SetMode(gin.ReleaseMode)
-	r := gin.Default()
-	r.SetTrustedProxies(nil)
-
 	router := gin.Default()
 	router.Use(cors.Default())
 
@@ -38,7 +34,7 @@ func main() {
 	router.POST("/actividades", middleware.AuthMiddleware(), controllers.CrearActividad)
 	router.PUT("/actividades/:id", middleware.AuthMiddleware(), controllers.EditarActividad)
 	router.DELETE("/actividades/:id", middleware.AuthMiddleware(), controllers.EliminarActividad)
-
+	router.POST("/horarios", middleware.AuthMiddleware(), controllers.CrearHorario)
 	router.Run(":8080")
 
 }
