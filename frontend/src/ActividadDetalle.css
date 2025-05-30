@@ -54,3 +54,19 @@
     color: black;
     font-weight: 500;
 }
+
+.inscribir-btn {
+    background-color: #28a745;
+    /* verde */
+    color: #fff;
+    /* texto blanco */
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.inscribir-btn:hover {
+    background-color: #218838;
+    /* verde un poco más oscuro al pasar el mouse */
+}

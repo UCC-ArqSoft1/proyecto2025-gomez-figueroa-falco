@@ -37,7 +37,7 @@ const Login = () => {
                 setError("");
 
                 // Redirecciona, muestra mensaje o cambia de vista...
-                navigate("/Actividades");
+                navigate("/actividades");
             } else {
                 setError(data.error || "Error desconocido");
                 setSuccess("");
