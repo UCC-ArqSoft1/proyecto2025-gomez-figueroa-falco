@@ -52,7 +52,6 @@ const ActividadDetalle = () => {
     // ...dentro de ActividadDetalle, justo antes del return:
     console.log("ROL desde localStorage:", rol);
 
-
     return (
         <div className="actividad-detalle-page">
             <div className="actividad-detalle-card">
