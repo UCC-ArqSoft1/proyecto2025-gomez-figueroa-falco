@@ -13,16 +13,30 @@ import (
 
 func GetActividadById(id int) domain.ActividadesDeportivas {
 
-	actDAO := clients.GetActividadById(id)
+	var act dao.Actividad
+	clients.DB.Preload("Horarios").First(&act, id)
+
+	horarios := make([]domain.Horario, len(act.Horarios))
+	for i, h := range act.Horarios {
+		horarios[i] = domain.Horario{
+			Id:          h.Id,
+			Dia:         h.Dia,
+			HoraInicio:  h.HoraInicio,
+			HoraFin:     h.HoraFin,
+			IdActividad: h.IdActividad,
+			CupoHorario: h.CupoHorario,
+		}
+	}
 
 	return domain.ActividadesDeportivas{
-		Id:          actDAO.Id,
-		Nombre:      actDAO.Nombre,
-		Descripcion: actDAO.Descripcion,
-		Categoria:   actDAO.Categoria,
-		CupoTotal:   actDAO.CupoTotal,
-		Profesor:    actDAO.Profesor,
-		Imagen:      actDAO.Imagen,
+		Id:          act.Id,
+		Nombre:      act.Nombre,
+		Descripcion: act.Descripcion,
+		Categoria:   act.Categoria,
+		CupoTotal:   act.CupoTotal,
+		Profesor:    act.Profesor,
+		Imagen:      act.Imagen,
+		Horarios:    horarios,
 	}
 }
 
