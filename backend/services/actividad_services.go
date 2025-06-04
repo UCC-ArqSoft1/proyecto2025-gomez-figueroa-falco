@@ -40,35 +40,56 @@ func GetActividadById(id int) domain.ActividadesDeportivas {
 	}
 }
 
-// filtra por palabra clave en título o categoría
-// devuelve todas las actividades si no se pasa palabra clave
+// BuscarActividades filtra por nombre, categoría o HORA (HH:mm)
+// Si q == "", devuelve todas
 func BuscarActividades(q string) ([]domain.ActividadesDeportivas, error) {
 	var acts []dao.Actividad
-	db := clients.DB.Preload("Horarios")
-	results := make([]domain.ActividadesDeportivas, 0)
-	var err *gorm.DB
-	if q == "" {
-		// trae todas las actividades
-		err = db.Find(&acts)
-	} else {
-		pattern := "%" + q + "%"
-		err = db.Where("Nombre LIKE ? OR categoria LIKE ?", pattern, pattern).Find(&acts)
-	}
-	if err.Error != nil {
-		return nil, err.Error
+
+	db := clients.DB.Model(&dao.Actividad{}).
+		Preload("Horarios")
+
+	if q != "" {
+		like := "%" + q + "%"
+		db = db.Joins("LEFT JOIN horarios h ON h.id_actividad = actividads.id").
+			Where(`
+                actividads.nombre      LIKE ?
+			   OR actividads.profesor  LIKE ?
+			   OR actividads.categoria LIKE ?
+             OR DATE_FORMAT(h.hora_inicio, '%H:%i') LIKE ?`,
+						like, like, like).
+			Group("actividads.id") // evita duplicados
 	}
 
-	for _, actDAO := range acts {
+	if err := db.Find(&acts).Error; err != nil {
+		return nil, err
+	}
+
+	// Map a domain + horarios
+	results := make([]domain.ActividadesDeportivas, 0, len(acts))
+	for _, a := range acts {
+		// armamos slice de horarios para la respuesta
+		hs := make([]domain.Horario, 0, len(a.Horarios))
+		for _, h := range a.Horarios {
+			hs = append(hs, domain.Horario{
+				Id:         h.Id,
+				Dia:        h.Dia,
+				HoraInicio: h.HoraInicio,
+				HoraFin:    h.HoraFin,
+			})
+		}
+
 		results = append(results, domain.ActividadesDeportivas{
-			Id:          actDAO.Id,
-			Nombre:      actDAO.Nombre,
-			Descripcion: actDAO.Descripcion,
-			Categoria:   actDAO.Categoria,
-			CupoTotal:   actDAO.CupoTotal,
-			Profesor:    actDAO.Profesor,
-			Imagen:      actDAO.Imagen,
+			Id:          a.Id,
+			Nombre:      a.Nombre,
+			Descripcion: a.Descripcion,
+			Categoria:   a.Categoria,
+			CupoTotal:   a.CupoTotal,
+			Profesor:    a.Profesor,
+			Imagen:      a.Imagen,
+			Horarios:    hs, // 👈 ahora el frontend los recibe
 		})
 	}
+
 	return results, nil
 }
 

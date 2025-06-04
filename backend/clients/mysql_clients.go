@@ -43,11 +43,26 @@ func init() {
 		panic(fmt.Sprintf("Error creando tabla: %s", err.Error()))
 	}
 
-	hashedPassword := fmt.Sprintf("%x", sha256.Sum256([]byte("admin")))
+	hashedPassword := fmt.Sprintf("%x", sha256.Sum256([]byte("emiliano")))
 
-	if result := DB.FirstOrCreate(&dao.User{
+	if result := DB.Create(&dao.User{
+		Nombre:       "Emiliano",
 		Username:     "emiliano",
+		Email:        "emiliano@gmial.com",
 		PasswordHash: hashedPassword,
+		Rol:          "SOCIO",
+	}); result.Error != nil {
+		fmt.Println("Error creando usuario: ", result.Error)
+	}
+
+	contraseña := fmt.Sprintf("%x", sha256.Sum256([]byte("fran")))
+
+	if result := DB.Create(&dao.User{
+		Nombre:       "Francisca",
+		Username:     "francisca",
+		Email:        "franciscafalco4@gmail.com",
+		PasswordHash: contraseña,
+		Rol:          "ADMIN",
 	}); result.Error != nil {
 		fmt.Println("Error creando usuario: ", result.Error)
 	}
