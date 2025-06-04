@@ -50,12 +50,19 @@ const ActividadDetalle = () => {
     if (loading) return <div>Cargando detalle…</div>;
     if (!act) return <div>Actividad no encontrada</div>;
 
+    console.log("ROL desde localStorage:", rol);
+
     return (
         <div className="actividad-detalle-page">
             <div className="actividad-detalle-card">
-                {/* ... tus otros campos de detalle ... */}
+                <h2 className="detalle-title">{act.nombre}</h2>
+                <img className="detalle-img" src={act.imagen} alt={act.nombre} />
+                <p className="detalle-text">{act.descripcion}</p>
+                <p><strong>Categoría:</strong> {act.categoria}</p>
+                <p><strong>Profesor:</strong> {act.profesor}</p>
+                <p><strong>Cupo:</strong> {act.cupo_total}</p>
 
-                {act.horarios && act.horarios.length > 0 && (
+                {act.horarios?.length > 0 && (
                     <div className="detalle-horarios">
                         <h3>Horarios</h3>
                         {act.horarios.map(h => (
@@ -65,8 +72,7 @@ const ActividadDetalle = () => {
                                     {new Date(h.hora_inicio).toLocaleTimeString([], {
                                         hour: "2-digit",
                                         minute: "2-digit",
-                                    })}{" "}
-                                    –{" "}
+                                    })} –{" "}
                                     {new Date(h.hora_fin).toLocaleTimeString([], {
                                         hour: "2-digit",
                                         minute: "2-digit",
