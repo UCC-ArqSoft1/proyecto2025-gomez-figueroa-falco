@@ -2,10 +2,22 @@ import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./ActividadDetalle.css";
 
+const CustomAlert = ({ message, onClose }) => (
+    <div className="alert-overlay">
+        <div className="alert-container">
+            <p className="alert-message">{message}</p>
+            <button className="alert-button" onClick={onClose}>
+                Aceptar
+            </button>
+        </div>
+    </div>
+);
+
 const ActividadDetalle = () => {
     const { id } = useParams();
     const [act, setAct] = useState(null);
     const [loading, setLoad] = useState(true);
+    const [alertMessage, setAlertMessage] = useState("");
 
     const userId = Number(localStorage.getItem("userId"));
     const rol = localStorage.getItem("rol");
@@ -37,13 +49,13 @@ const ActividadDetalle = () => {
             );
             const data = await res.json();
             if (res.ok) {
-                alert(data.msg);
+                setAlertMessage(data.msg);
             } else {
-                alert(data.error);
+                setAlertMessage(data.error);
             }
         } catch (e) {
             console.error(e);
-            alert("Error al inscribirse");
+            setAlertMessage("Error al inscribirse");
         }
     };
 
@@ -95,6 +107,12 @@ const ActividadDetalle = () => {
                     ← Volver
                 </Link>
             </div>
+            {alertMessage && (
+                <CustomAlert
+                    message={alertMessage}
+                    onClose={() => setAlertMessage("")}
+                />
+            )}
         </div>
     );
 };

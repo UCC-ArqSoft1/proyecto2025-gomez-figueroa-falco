@@ -27,9 +27,9 @@ const MisActividades = () => {
 
     return (
         <div className="mis-actividades-page">
-            <h2>Mis actividades inscritas</h2>
+            <h2>Actividades a las que estoy inscripcto</h2>
             {misAct.length === 0 ? (
-                <p>No estás inscrito en ninguna actividad.</p>
+                <p>No estás inscripto en ninguna actividad.</p>
             ) : (
                 <div className="mis-actividades-list">
                     {misAct.map(a => (

@@ -13,7 +13,6 @@ func main() {
 
 	router := gin.Default()
 	router.SetTrustedProxies(nil)
-	router.Use(cors.Default())
 
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},

@@ -1,50 +1,94 @@
 .mis-actividades-page {
-    padding: 2rem;
-    font-family: Arial, sans-serif;
+    padding: var(--spacing-lg);
+    font-family: var(--font-family-base);
+    background-color: var(--color-gray-100);
+    min-height: 80vh;
 }
 
 .mis-actividades-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1rem;
+    gap: var(--spacing-md);
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .actividad-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 1rem;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+    background-color: var(--color-white);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.actividad-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 .actividad-nombre {
-    margin: 0 0 0.5rem;
+    margin: 0 0 var(--spacing-sm);
+    color: var(--color-primary);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
 }
 
 .actividad-profesor {
-    margin: 0 0 0.75rem;
-    font-size: 0.95rem;
+    margin: 0 0 var(--spacing-md);
+    font-size: var(--font-size-base);
+    color: var(--color-gray-400);
 }
 
 .actividad-horarios {
-    margin-bottom: 0.75rem;
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-sm);
+    background-color: var(--color-gray-100);
+    border-radius: var(--border-radius-sm);
 }
 
 .horario-item {
-    margin: 0.25rem 0;
-    font-size: 0.9rem;
+    margin: var(--spacing-xs) 0;
+    font-size: var(--font-size-base);
+    color: var(--color-gray-500);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--color-white);
+    border-radius: var(--border-radius-sm);
+    border-left: 3px solid var(--color-primary);
 }
 
 .back-btn {
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
+    display: inline-block;
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-xs) var(--spacing-md);
     border: none;
-    border-radius: 4px;
-    background-color: #6c757d;
-    color: #fff;
+    border-radius: var(--border-radius-md);
+    background-color: var(--color-primary);
+    color: var(--color-white);
     cursor: pointer;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+    transition: all 0.3s ease;
 }
 
 .back-btn:hover {
-    opacity: 0.9;
+    background-color: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 768px) {
+    .mis-actividades-page {
+        padding: var(--spacing-md);
+    }
+
+    .mis-actividades-list {
+        grid-template-columns: 1fr;
+    }
+
+    .actividad-card {
+        padding: var(--spacing-md);
+    }
 }

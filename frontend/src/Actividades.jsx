@@ -1,4 +1,3 @@
-// src/Actividades.jsx
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import "./Actividades.css";

@@ -1,12 +1,8 @@
-
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./Login.css";
 
-
-
 const Login = () => {
-
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -17,6 +13,12 @@ const Login = () => {
         e.preventDefault();
         setError("");
         setSuccess("");
+
+        if (!username || !password) {
+            setError("Por favor, completa todos los campos");
+            return;
+        }
+
         try {
             const res = await fetch("http://localhost:8080/login", {
                 method: "POST",
@@ -29,14 +31,11 @@ const Login = () => {
 
             if (res.ok && data.token) {
                 localStorage.setItem("token", data.token);
-                // decodificar y guardar userId y rol
                 const payload = JSON.parse(atob(data.token.split('.')[1]));
                 localStorage.setItem("userId", payload.userId);
-                localStorage.setItem("rol", payload.rol); // Guarda el token si querés usarlo después
+                localStorage.setItem("rol", payload.rol);
                 setSuccess("¡Login correcto!");
                 setError("");
-
-                // Redirecciona, muestra mensaje o cambia de vista...
                 navigate("/actividades");
             } else {
                 setError(data.error || "Error desconocido");
@@ -47,18 +46,19 @@ const Login = () => {
             setSuccess("");
         }
     };
+
     return (
         <div className="login-container">
-            <form className="login-form" onSubmit={handleLogin}>
-                <h2>
-                    Iniciar Sesion
-                </h2>
+            <form className="login-form" onSubmit={handleLogin} noValidate>
+                <h2>Iniciar Sesión</h2>
                 <input
                     type="text"
                     placeholder="Usuario"
                     onChange={(e) => setUsername(e.target.value)}
                     value={username}
                     required
+                    aria-label="Usuario"
+                    aria-required="true"
                 />
                 <input
                     type="password"
@@ -66,12 +66,15 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
                     required
+                    aria-label="Contraseña"
+                    aria-required="true"
                 />
                 <button type="submit">Ingresar</button>
                 {error && <div className="login-error">{error}</div>}
                 {success && <div className="login-success">{success}</div>}
             </form>
         </div>
-    )
-}
+    );
+};
+
 export default Login;

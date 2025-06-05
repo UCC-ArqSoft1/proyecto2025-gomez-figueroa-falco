@@ -150,3 +150,10 @@ func GetUserByUsername(username string) dao.User {
 	DB.First(&user, "username = ?", username)
 	return user
 }
+
+func GetActividadById(id int) dao.Actividad {
+	var actividad dao.Actividad
+	// SELECT * FROM users WHERE username = ? LIMIT 1
+	DB.First(&actividad, id)
+	return actividad
+}
