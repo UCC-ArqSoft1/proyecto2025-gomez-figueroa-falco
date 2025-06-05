@@ -54,7 +54,6 @@ func BuscarActividades(q string) ([]domain.ActividadesDeportivas, error) {
 			Where(`
                 actividads.nombre      LIKE ?
 			   OR actividads.profesor  LIKE ?
-			   OR actividads.categoria LIKE ?
              OR DATE_FORMAT(h.hora_inicio, '%H:%i') LIKE ?`,
 						like, like, like).
 			Group("actividads.id") // evita duplicados
