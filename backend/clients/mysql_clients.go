@@ -69,11 +69,11 @@ func init() {
 
 	if result := DB.Create(&dao.Actividad{
 		Nombre:      "Funcional",
-		Descripcion: "Descripcion de la actividad 1",
+		Descripcion: "Entrenaminento basado en movimeintos naturales del cuerpo. Mejora tu eficiencia diaria aprendiendo a moverte mejor y prevenir lesiones",
 		Categoria:   "Categoria 1",
 		CupoTotal:   10,
 		Profesor:    "Juan Cabral",
-		Imagen:      "imagen1.jpg",
+		Imagen:      "/images/funcional.png",
 		Horarios: []dao.Horario{
 			{
 				Dia:         "Lunes",
@@ -93,12 +93,12 @@ func init() {
 	}
 
 	if result := DB.Create(&dao.Actividad{
-		Nombre:      "Spinning",
-		Descripcion: "Actividad en bici fija, guiada por profesor",
+		Nombre:      "Pilates",
+		Descripcion: "Es un método de entrenamiento que utiliza el propio peso corporal para fortalecer y tonificar los músculos, mejorar la postura y la flexibilidad, y aumentar la resistencia física y mental.",
 		Categoria:   "Categoria 1",
 		CupoTotal:   20,
 		Profesor:    "Francisca 1",
-		Imagen:      "imagen1.jpg",
+		Imagen:      "/images/pilates.png",
 		Horarios: []dao.Horario{
 			{
 				Dia:         "Martes",
@@ -118,12 +118,12 @@ func init() {
 	}
 
 	if result := DB.Create(&dao.Actividad{
-		Nombre:      "Running",
-		Descripcion: "Actividad al aire libre, guiada por profesor",
+		Nombre:      "Spinning",
+		Descripcion: "Clase de ciclismo indoor con música motivadora. Quema calorías, mejora tu resistencia cardiovascular y tonifica tus piernas en un ambiente energético y divertido.",
 		Categoria:   "Categoria 2",
 		CupoTotal:   20,
 		Profesor:    "Magdalena Gomez",
-		Imagen:      "imagen1.jpg",
+		Imagen:      "/images/spining.png",
 		Horarios: []dao.Horario{
 			{
 				Dia:         "Lunes",

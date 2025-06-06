@@ -52,7 +52,7 @@ export default function Actividades() {
                 <input
                     className="busqueda-input"
                     type="text"
-                    placeholder="Buscar por título, horario o categoría…"
+                    placeholder="Buscar por título, horario o Profesor..."
                     value={busqueda}
                     onChange={(e) => setBusqueda(e.target.value)}
                 />
