@@ -45,7 +45,7 @@ func init() {
 
 	hashedPassword := fmt.Sprintf("%x", sha256.Sum256([]byte("emiliano")))
 
-	if result := DB.Create(&dao.User{
+	if result := DB.Where("username = ?", "emiliano").FirstOrCreate(&dao.User{
 		Nombre:       "Emiliano",
 		Username:     "emiliano",
 		Email:        "emiliano@gmial.com",
@@ -57,7 +57,7 @@ func init() {
 
 	contraseña := fmt.Sprintf("%x", sha256.Sum256([]byte("fran")))
 
-	if result := DB.Create(&dao.User{
+	if result := DB.Where("username = ?", "francisca").FirstOrCreate(&dao.User{
 		Nombre:       "Francisca",
 		Username:     "francisca",
 		Email:        "franciscafalco4@gmail.com",
@@ -67,7 +67,7 @@ func init() {
 		fmt.Println("Error creando usuario: ", result.Error)
 	}
 
-	if result := DB.Create(&dao.Actividad{
+	if result := DB.Where("nombre = ?", "Funcional").FirstOrCreate(&dao.Actividad{
 		Nombre:      "Funcional",
 		Descripcion: "Entrenaminento basado en movimeintos naturales del cuerpo. Mejora tu eficiencia diaria aprendiendo a moverte mejor y prevenir lesiones",
 		Categoria:   "Categoria 1",
@@ -92,7 +92,7 @@ func init() {
 		fmt.Println("Error creando actividad: ", result.Error)
 	}
 
-	if result := DB.Create(&dao.Actividad{
+	if result := DB.Where("nombre = ?", "Pilates").FirstOrCreate(&dao.Actividad{
 		Nombre:      "Pilates",
 		Descripcion: "Es un método de entrenamiento que utiliza el propio peso corporal para fortalecer y tonificar los músculos, mejorar la postura y la flexibilidad, y aumentar la resistencia física y mental.",
 		Categoria:   "Categoria 1",
@@ -117,7 +117,7 @@ func init() {
 		fmt.Println("Error creando actividad: ", result.Error)
 	}
 
-	if result := DB.Create(&dao.Actividad{
+	if result := DB.Where("nombre = ?", "Spinning").FirstOrCreate(&dao.Actividad{
 		Nombre:      "Spinning",
 		Descripcion: "Clase de ciclismo indoor con música motivadora. Quema calorías, mejora tu resistencia cardiovascular y tonifica tus piernas en un ambiente energético y divertido.",
 		Categoria:   "Categoria 2",

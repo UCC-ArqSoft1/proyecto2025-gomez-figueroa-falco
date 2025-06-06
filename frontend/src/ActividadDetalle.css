@@ -35,8 +35,8 @@
 }
 
 .detalle-img {
-    width: 50%;
-    max-width: 500px;
+    width: 30%;
+    max-width: 300px;
     height: auto;
     border-radius: var(--border-radius-md);
     margin: 0 auto var(--spacing-lg) auto;

@@ -3,6 +3,11 @@
     font-family: var(--font-family-base);
     background-color: var(--color-gray-100);
     min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .mis-actividades-list {
@@ -10,7 +15,7 @@
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: var(--spacing-md);
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 0 auto var(--spacing-xl) auto;
 }
 
 .actividad-card {
@@ -57,26 +62,13 @@
     border-left: 3px solid var(--color-primary);
 }
 
-.back-btn {
-    display: inline-block;
-    margin-top: var(--spacing-lg);
-    margin-bottom: var(--spacing-lg);
+/* Estilo específico para el botón de volver */
+.mis-actividades-page .mis-actividades-btn {
+    font-size: 0.9rem;
     padding: var(--spacing-xs) var(--spacing-md);
-    border: none;
-    border-radius: var(--border-radius-md);
-    background-color: var(--color-primary);
-    color: var(--color-white);
-    cursor: pointer;
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-medium);
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.back-btn:hover {
-    background-color: var(--color-primary-dark);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
+    width: fit-content;
+    margin-top: var(--spacing-xl);
+    align-self: flex-start;
 }
 
 @media (max-width: 768px) {

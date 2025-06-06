@@ -12,19 +12,41 @@ import (
 )
 
 func GetActividadById(id int) domain.ActividadesDeportivas {
-
 	var act dao.Actividad
 	clients.DB.Preload("Horarios").First(&act, id)
 
-	horarios := make([]domain.Horario, len(act.Horarios))
-	for i, h := range act.Horarios {
-		horarios[i] = domain.Horario{
-			Id:          h.Id,
-			Dia:         h.Dia,
-			HoraInicio:  h.HoraInicio,
-			HoraFin:     h.HoraFin,
-			IdActividad: h.IdActividad,
-			CupoHorario: h.CupoHorario,
+	// Buscar la inscripción para esta actividad
+	var inscripcion dao.Inscripcion
+	err := clients.DB.Where("id_actividad = ?", id).First(&inscripcion).Error
+
+	var horarios []domain.Horario
+	if err == nil {
+		// Si encontramos una inscripción, solo mostramos ese horario
+		for _, h := range act.Horarios {
+			if h.Id == inscripcion.IdHorario {
+				horarios = append(horarios, domain.Horario{
+					Id:          h.Id,
+					Dia:         h.Dia,
+					HoraInicio:  h.HoraInicio,
+					HoraFin:     h.HoraFin,
+					IdActividad: h.IdActividad,
+					CupoHorario: h.CupoHorario,
+				})
+				break
+			}
+		}
+	} else {
+		// Si no hay inscripción, mostramos todos los horarios
+		horarios = make([]domain.Horario, len(act.Horarios))
+		for i, h := range act.Horarios {
+			horarios[i] = domain.Horario{
+				Id:          h.Id,
+				Dia:         h.Dia,
+				HoraInicio:  h.HoraInicio,
+				HoraFin:     h.HoraFin,
+				IdActividad: h.IdActividad,
+				CupoHorario: h.CupoHorario,
+			}
 		}
 	}
 

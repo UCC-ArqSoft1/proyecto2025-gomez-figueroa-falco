@@ -40,7 +40,7 @@ export default function Actividades() {
         }
     }, [termino]);
 
-    /* 2️⃣  dispara al montar el componente y cada vez que cambia ‘termino’ */
+    /* 2️⃣  dispara al montar el componente y cada vez que cambia 'termino' */
     useEffect(() => {
         fetchActividades();
     }, [fetchActividades]);
@@ -52,13 +52,13 @@ export default function Actividades() {
                 <input
                     className="busqueda-input"
                     type="text"
-                    placeholder="Buscar por título, horario o Profesor..."
+                    placeholder="Buscar por título, horario o profesor..."
                     value={busqueda}
                     onChange={(e) => setBusqueda(e.target.value)}
                 />
 
                 {rol === "SOCIO" && (
-                    <Link to="/mis-actividades" className="mis-actividades-link">
+                    <Link to="/mis-actividades" className="mis-actividades-btn">
                         Mis actividades
                     </Link>
                 )}

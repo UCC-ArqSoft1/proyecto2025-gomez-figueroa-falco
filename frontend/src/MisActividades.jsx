@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "./MisActividades.css";
 
 const MisActividades = () => {
@@ -62,12 +63,9 @@ const MisActividades = () => {
                     ))}
                 </div>
             )}
-            <button
-                className="back-btn"
-                onClick={() => (window.location.href = "/actividades")}
-            >
+            <Link to="/actividades" className="mis-actividades-btn">
                 ← Volver a todas las actividades
-            </button>
+            </Link>
         </div>
     );
 };
