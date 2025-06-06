@@ -15,38 +15,16 @@ func GetActividadById(id int) domain.ActividadesDeportivas {
 	var act dao.Actividad
 	clients.DB.Preload("Horarios").First(&act, id)
 
-	// Buscar la inscripción para esta actividad
-	var inscripcion dao.Inscripcion
-	err := clients.DB.Where("id_actividad = ?", id).First(&inscripcion).Error
-
-	var horarios []domain.Horario
-	if err == nil {
-		// Si encontramos una inscripción, solo mostramos ese horario
-		for _, h := range act.Horarios {
-			if h.Id == inscripcion.IdHorario {
-				horarios = append(horarios, domain.Horario{
-					Id:          h.Id,
-					Dia:         h.Dia,
-					HoraInicio:  h.HoraInicio,
-					HoraFin:     h.HoraFin,
-					IdActividad: h.IdActividad,
-					CupoHorario: h.CupoHorario,
-				})
-				break
-			}
-		}
-	} else {
-		// Si no hay inscripción, mostramos todos los horarios
-		horarios = make([]domain.Horario, len(act.Horarios))
-		for i, h := range act.Horarios {
-			horarios[i] = domain.Horario{
-				Id:          h.Id,
-				Dia:         h.Dia,
-				HoraInicio:  h.HoraInicio,
-				HoraFin:     h.HoraFin,
-				IdActividad: h.IdActividad,
-				CupoHorario: h.CupoHorario,
-			}
+	// Convertir todos los horarios al dominio
+	horarios := make([]domain.Horario, len(act.Horarios))
+	for i, h := range act.Horarios {
+		horarios[i] = domain.Horario{
+			Id:          h.Id,
+			Dia:         h.Dia,
+			HoraInicio:  h.HoraInicio,
+			HoraFin:     h.HoraFin,
+			IdActividad: h.IdActividad,
+			CupoHorario: h.CupoHorario,
 		}
 	}
 
@@ -117,10 +95,10 @@ func BuscarActividades(q string) ([]domain.ActividadesDeportivas, error) {
 func ActividadesDeUsuario(userID uint) ([]dao.Actividad, error) {
 	var acts []dao.Actividad
 	db := clients.DB.
-		Preload("Horarios").
-		Joins("JOIN horarios     ON horarios.id_actividad   = actividads.id").
-		Joins("JOIN inscripcions ON inscripcions.id_horario = horarios.id").
+		Preload("Horarios", "id IN (SELECT id_horario FROM inscripcions WHERE id_usuario = ?)", userID).
+		Joins("JOIN inscripcions ON inscripcions.id_actividad = actividads.id").
 		Where("inscripcions.id_usuario = ?", userID).
+		Group("actividads.id").
 		Find(&acts)
 	return acts, db.Error
 }

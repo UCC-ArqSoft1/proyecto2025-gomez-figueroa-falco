@@ -44,6 +44,7 @@ const MisActividades = () => {
                             {/* Horarios también en PascalCase */}
                             {a.Horarios?.length > 0 && (
                                 <div className="actividad-horarios">
+                                    <p className="horario-titulo"><strong>Horario inscripto:</strong></p>
                                     {a.Horarios.map(h => (
                                         <p key={h.Id} className="horario-item">
                                             <strong>{h.Dia}:</strong>{" "}
