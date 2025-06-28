@@ -149,26 +149,26 @@
     font-size: var(--font-size-lg);
 }
 
-.detalle-btn {
+.detalle-btn,
+.crear-actividad-btn {
     display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-md);
     background: var(--color-gray-200);
     color: var(--color-black);
     border: none;
     border-radius: var(--border-radius-md);
-    text-decoration: none;
+    font-size: var(--font-size-base);
     font-weight: var(--font-weight-medium);
+    cursor: pointer;
     transition: all 0.3s ease;
-    letter-spacing: 0.5px;
-    text-align: center;
-    width: 100%;
-    padding: var(--spacing-sm) var(--spacing-md);
-    margin-top: var(--spacing-sm);
-    box-sizing: border-box;
+    white-space: nowrap;
+    min-width: 120px;
+    margin: 0;
 }
 
-.detalle-btn:hover {
+.detalle-btn:hover,
+.crear-actividad-btn:hover {
     background: var(--color-gray-300);
-    transform: translateY(-2px);
 }
 
 /* Media queries para responsividad */

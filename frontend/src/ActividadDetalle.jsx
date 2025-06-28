@@ -103,9 +103,16 @@ const ActividadDetalle = () => {
                     </div>
                 )}
 
-                <Link to="/actividades" className="detalle-back">
-                    ← Volver
-                </Link>
+                <div className="detalle-actions">
+                    <Link to="/actividades" className="detalle-back">
+                        ← Volver
+                    </Link>
+                    {rol === "ADMIN" && (
+                        <Link to={`/editar-actividad/${id}`} className="editar-btn">
+                            ✏️ Editar Actividad
+                        </Link>
+                    )}
+                </div>
             </div>
             {alertMessage && (
                 <CustomAlert

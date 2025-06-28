@@ -7,7 +7,7 @@ import (
 	"backend/dto"
 	"errors"
 	"time"
-
+"fmt"
 	"gorm.io/gorm"
 )
 
@@ -17,14 +17,14 @@ func GetActividadById(id int) domain.ActividadesDeportivas {
 
 	// Convertir todos los horarios al dominio
 	horarios := make([]domain.Horario, len(act.Horarios))
-	for i, h := range act.Horarios {
-		horarios[i] = domain.Horario{
-			Id:          h.Id,
-			Dia:         h.Dia,
-			HoraInicio:  h.HoraInicio,
-			HoraFin:     h.HoraFin,
-			IdActividad: h.IdActividad,
-			CupoHorario: h.CupoHorario,
+		for i, h := range act.Horarios {
+			horarios[i] = domain.Horario{
+				Id:          h.Id,
+				Dia:         h.Dia,
+				HoraInicio:  h.HoraInicio,
+				HoraFin:     h.HoraFin,
+				IdActividad: h.IdActividad,
+				CupoHorario: h.CupoHorario,
 		}
 	}
 
@@ -106,6 +106,9 @@ func ActividadesDeUsuario(userID uint) ([]dao.Actividad, error) {
 func CrearActividadConHorario(input dto.ActividadConHorarioRequest) error {
 	db := clients.DB
 
+	// Array de días en español
+	diasSemana := []string{"Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"}
+
 	return db.Transaction(func(tx *gorm.DB) error {
 		// Crear la actividad
 		actividad := dao.Actividad{
@@ -120,27 +123,35 @@ func CrearActividadConHorario(input dto.ActividadConHorarioRequest) error {
 			return err
 		}
 
-		//Parsear hora de inicio y fin
-		layout := "15:04"
-		horaInicio, err := time.Parse(layout, input.Horario.HoraInicio)
-		if err != nil {
-			return errors.New("error al parsear hora de inicio: " + err.Error())
-		}
-		horaFin, err := time.Parse(layout, input.Horario.HoraFin)
-		if err != nil {
-			return errors.New("error al parsear hora de fin: " + err.Error())
-		}
+		
+		// Guardar todos los horarios
+		for _, h := range input.Horarios {
 
-		// Crear el horario
-		horario := dao.Horario{
-			Dia:         input.Horario.Dia,
-			HoraInicio:  horaInicio,
-			HoraFin:     horaFin,
-			CupoHorario: input.Horario.CupoHorario,
-			IdActividad: actividad.Id,
-		}
-		if err := tx.Create(&horario).Error; err != nil {
-			return err
+			fmt.Printf("Parseando hora_inicio: '%s', hora_fin: '%s'\n", h.HoraInicio, h.HoraFin)
+				// ... resto del código ...
+			
+			layout := "2006-01-02 15:04"
+			
+			
+			horaInicio, err := time.Parse(layout, h.HoraInicio)
+			if err != nil {
+				return errors.New("error al parsear hora de inicio: " + err.Error())
+			}
+			horaFin, err := time.Parse(layout, h.HoraFin)
+			if err != nil {
+				return errors.New("error al parsear hora de fin: " + err.Error())
+			}
+			dia := diasSemana[int(horaInicio.Weekday())]
+			horario := dao.Horario{
+				Dia:         dia,
+				HoraInicio:  horaInicio,
+				HoraFin:     horaFin,
+				CupoHorario: h.CupoHorario,
+				IdActividad: actividad.Id,
+			}
+			if err := tx.Create(&horario).Error; err != nil {
+				return err
+			}
 		}
 		return nil
 	})
@@ -149,21 +160,60 @@ func CrearActividadConHorario(input dto.ActividadConHorarioRequest) error {
 func ActualizarActividad(id uint, input dto.ActividadConHorarioRequest) error {
 	db := clients.DB
 
-	// Buscar la actividad por ID
-	var actividad dao.Actividad
-	if err := db.First(&actividad, id).Error; err != nil {
-		return errors.New("actividad no encontrada")
-	}
+	// Array de días en español
+	diasSemana := []string{"Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"}
 
-	// Actualizar los campos de la actividad
-	actividad.Nombre = input.Nombre
-	actividad.Descripcion = input.Descripcion
-	actividad.Categoria = input.Categoria
-	actividad.Profesor = input.Profesor
-	actividad.Imagen = input.Imagen
-	actividad.CupoTotal = input.CupoTotal
+	return db.Transaction(func(tx *gorm.DB) error {
+		// Buscar la actividad por ID
+		var actividad dao.Actividad
+		if err := tx.First(&actividad, id).Error; err != nil {
+			return errors.New("actividad no encontrada")
+		}
 
-	return db.Save(&actividad).Error
+		// Actualizar los campos de la actividad
+		actividad.Nombre = input.Nombre
+		actividad.Descripcion = input.Descripcion
+		actividad.Categoria = input.Categoria
+		actividad.Profesor = input.Profesor
+		actividad.Imagen = input.Imagen
+		actividad.CupoTotal = input.CupoTotal
+
+		if err := tx.Save(&actividad).Error; err != nil {
+			return err
+		}
+
+		// Eliminar todos los horarios existentes de la actividad
+		if err := tx.Where("id_actividad = ?", id).Delete(&dao.Horario{}).Error; err != nil {
+			return err
+		}
+
+		// Crear los nuevos horarios
+		for _, h := range input.Horarios {
+			layout := "2006-01-02 15:04"
+			
+			horaInicio, err := time.Parse(layout, h.HoraInicio)
+			if err != nil {
+				return errors.New("error al parsear hora de inicio: " + err.Error())
+			}
+			horaFin, err := time.Parse(layout, h.HoraFin)
+			if err != nil {
+				return errors.New("error al parsear hora de fin: " + err.Error())
+			}
+			
+			dia := diasSemana[int(horaInicio.Weekday())]
+			horario := dao.Horario{
+				Dia:         dia,
+				HoraInicio:  horaInicio,
+				HoraFin:     horaFin,
+				CupoHorario: h.CupoHorario,
+				IdActividad: actividad.Id,
+			}
+			if err := tx.Create(&horario).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
 }
 func EliminarActividad(id uint) error {
 	db := clients.DB

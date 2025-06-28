@@ -10,7 +10,6 @@ import (
 )
 
 func main() {
-
 	router := gin.Default()
 	router.SetTrustedProxies(nil)
 
@@ -22,6 +21,8 @@ func main() {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
+
+	router.Static("/images", "./public/images")
 
 	router.GET("/actividades", controllers.GetActividades)
 	router.GET("/actividad/:id", controllers.GetActividadById)
@@ -36,5 +37,4 @@ func main() {
 	router.DELETE("/actividades/:id", middleware.AuthMiddleware(), controllers.EliminarActividad)
 
 	router.Run(":8080")
-
 }

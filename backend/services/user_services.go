@@ -4,7 +4,6 @@ import (
 	"backend/clients"
 	"crypto/sha256"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -16,7 +15,7 @@ type CustomClaims struct {
 	jwt.RegisteredClaims
 }
 
-var jwtKey = []byte(os.Getenv("JWT_SECRET"))
+var jwtKey = []byte("jwtSecret")
 
 func GenerateToken(UserId uint, rol string) (string, error) {
 	claims := CustomClaims{

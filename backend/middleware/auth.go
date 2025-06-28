@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +15,7 @@ type CustomClaims struct {
 }
 
 func AuthMiddleware() gin.HandlerFunc {
-	key := []byte(os.Getenv("JWT_SECRET"))
+	key := []byte("jwtSecret")
 	return func(c *gin.Context) {
 		if len(key) == 0 {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "JWT_SECRET no configurado"})

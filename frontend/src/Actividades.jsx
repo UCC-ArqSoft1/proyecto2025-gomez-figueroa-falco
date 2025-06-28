@@ -62,6 +62,11 @@ export default function Actividades() {
                         Mis actividades
                     </Link>
                 )}
+                {rol === "ADMIN" && (
+                    <Link to="/crear-actividad" className="crear-actividad-btn">
+                        Crear Actividad
+                    </Link>
+                )}
             </header>
 
             {loading && <p className="cargando">Cargando…</p>}
