@@ -71,6 +71,11 @@
     background-color: var(--color-gray-100);
     border-radius: var(--border-radius-md);
     border: 1px solid var(--color-gray-200);
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: auto;
 }
 
 .actividad-horarios p {
@@ -78,6 +83,13 @@
     font-size: var(--font-size-base);
     color: var(--color-gray-500);
     line-height: 1.5;
+}
+
+.actividad-profesor {
+    margin-top: auto;
+    margin-bottom: 0;
+    font-size: var(--font-size-base);
+    color: var(--color-gray-500);
 }
 
 /* Contenedor de búsqueda y filtros */
@@ -150,25 +162,39 @@
 }
 
 .detalle-btn,
-.crear-actividad-btn {
-    display: inline-block;
-    padding: var(--spacing-xs) var(--spacing-md);
+.crear-actividad-btn,
+.mis-actividades-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-base);
+    letter-spacing: 0.5px;
+    text-align: center;
     background: var(--color-gray-200);
     color: var(--color-black);
     border: none;
     border-radius: var(--border-radius-md);
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-medium);
-    cursor: pointer;
     transition: all 0.3s ease;
+    min-width: 140px;
+    height: 44px;
+    padding: 0 var(--spacing-lg);
+    margin: var(--spacing-sm) 0 0 0;
+    box-sizing: border-box;
+    text-decoration: none;
     white-space: nowrap;
-    min-width: 120px;
-    margin: 0;
 }
 
 .detalle-btn:hover,
-.crear-actividad-btn:hover {
+.crear-actividad-btn:hover,
+.mis-actividades-btn:hover {
     background: var(--color-gray-300);
+    color: var(--color-black);
+    transform: translateY(-2px);
+}
+
+.actividad-card .detalle-btn {
+    margin-top: auto;
 }
 
 /* Media queries para responsividad */
@@ -198,4 +224,41 @@
     .mis-actividades-btn {
         width: 100%;
     }
+}
+
+.logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-base);
+    letter-spacing: 0.5px;
+    text-align: center;
+    background: var(--color-gray-200);
+    color: var(--color-black);
+    border: none;
+    border-radius: var(--border-radius-md);
+    transition: all 0.3s ease;
+    min-width: 140px;
+    height: 44px;
+    padding: 0 var(--spacing-lg);
+    margin: var(--spacing-sm) 0 0 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background: var(--color-gray-300);
+    color: var(--color-black);
+    transform: translateY(-2px);
+}
+
+.logout-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    margin-right: 15rem;
 }

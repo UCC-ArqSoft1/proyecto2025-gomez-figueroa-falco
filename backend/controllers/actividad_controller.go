@@ -127,14 +127,70 @@ func EditarActividad(ctx *gin.Context) {
 		return
 	}
 
+	contentType := ctx.ContentType()
 	var input dto.ActividadConHorarioRequest
-	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Datos inválidos"})
+
+	if contentType == "application/json" {
+		// Modo JSON (sin imagen)
+		if err := ctx.ShouldBindJSON(&input); err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Datos inválidos"})
+			return
+		}
+	} else if contentType == "multipart/form-data" {
+		// Modo multipart (con posible imagen)
+		input.Nombre = ctx.PostForm("nombre")
+		input.Descripcion = ctx.PostForm("descripcion")
+		input.Categoria = ctx.PostForm("categoria")
+		input.Profesor = ctx.PostForm("profesor")
+		cupoTotalS := ctx.PostForm("cupo_total")
+		horariosStr := ctx.PostForm("horarios")
+
+		var horariosInput []dto.HorarioRequest
+		if err := json.Unmarshal([]byte(horariosStr), &horariosInput); err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Horarios inválidos"})
+			return
+		}
+		input.Horarios = horariosInput
+
+		if input.Nombre == "" || input.Descripcion == "" || input.Categoria == "" ||
+			input.Profesor == "" || cupoTotalS == "" || len(input.Horarios) == 0 {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Faltan datos"})
+			return
+		}
+
+		cupoTotalInt, err := strconv.Atoi(cupoTotalS)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Cupo total inválido"})
+			return
+		}
+		input.CupoTotal = uint(cupoTotalInt)
+
+		// Imagen (opcional)
+		var rutaImagen string
+		if file, err := ctx.FormFile("imagen"); err == nil {
+			filename := file.Filename
+			dst := "../frontend/public/images/" + filename
+			if err := ctx.SaveUploadedFile(file, dst); err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo guardar la imagen"})
+				return
+			}
+			rutaImagen = "/images/" + filename
+		}
+
+		// Si no se subió nueva imagen, mantener la anterior
+		if rutaImagen == "" {
+			// Buscar la actividad actual para mantener la imagen
+			act := services.GetActividadById(id)
+			rutaImagen = act.Imagen
+		}
+		input.Imagen = rutaImagen
+	} else {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Tipo de contenido no soportado"})
 		return
 	}
 
 	// Validar que los datos requeridos estén presentes
-	if input.Nombre == "" || input.Descripcion == "" || input.Categoria == "" || 
+	if input.Nombre == "" || input.Descripcion == "" || input.Categoria == "" ||
 		input.Profesor == "" || input.CupoTotal == 0 || len(input.Horarios) == 0 {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Faltan datos requeridos"})
 		return
@@ -146,10 +202,9 @@ func EditarActividad(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, gin.H{"msg": "Actividad editada"})
 }
-
 func EliminarActividad(ctx *gin.Context) {
 	rol, ok := ctx.Get("rol")
-	if !ok || rol != "admin" {
+	if !ok || rol != "ADMIN" {
 		ctx.JSON(http.StatusForbidden, gin.H{"error": "No autorizado"})
 		return
 	}

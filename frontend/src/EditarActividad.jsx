@@ -39,6 +39,7 @@ export default function EditarActividad() {
         categoria: "",
         profesor: "",
         cupo_total: "",
+        imagen: "",
     });
     const [horarios, setHorarios] = useState([
         { hora_inicio: "", hora_fin: "", cupo_horario: "" }
@@ -67,6 +68,7 @@ export default function EditarActividad() {
                     categoria: actividad.categoria || "",
                     profesor: actividad.profesor || "",
                     cupo_total: actividad.cupo_total?.toString() || "",
+                    imagen: actividad.imagen || "",
                 });
 
                 // Convertir horarios al formato del formulario
@@ -124,28 +126,46 @@ export default function EditarActividad() {
             cupo_horario: Number(h.cupo_horario)
         }));
 
-        const datosActividad = {
-            nombre: form.nombre,
-            descripcion: form.descripcion,
-            categoria: form.categoria,
-            profesor: form.profesor,
-            cupo_total: Number(form.cupo_total),
-            imagen: "", // Por ahora no manejamos cambio de imagen
-            horarios: horariosTransformados
-        };
-
+        let res, result;
         try {
             const token = localStorage.getItem("token");
-            const res = await fetch(`http://localhost:8080/actividades/${id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify(datosActividad),
-            });
-
-            const result = await res.json();
+            if (file) {
+                // Si hay nueva imagen, usar FormData
+                const data = new FormData();
+                data.append("nombre", form.nombre);
+                data.append("descripcion", form.descripcion);
+                data.append("categoria", form.categoria);
+                data.append("profesor", form.profesor);
+                data.append("cupo_total", form.cupo_total);
+                data.append("horarios", JSON.stringify(horariosTransformados));
+                data.append("imagen", file);
+                res = await fetch(`http://localhost:8080/actividades/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: data,
+                });
+            } else {
+                // Si no hay nueva imagen, enviar JSON
+                const datosActividad = {
+                    nombre: form.nombre,
+                    descripcion: form.descripcion,
+                    categoria: form.categoria,
+                    profesor: form.profesor,
+                    cupo_total: Number(form.cupo_total),
+                    horarios: horariosTransformados
+                };
+                res = await fetch(`http://localhost:8080/actividades/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(datosActividad),
+                });
+            }
+            result = await res.json();
             if (res.ok) {
                 navigate(`/actividad/${id}`);
             } else {
@@ -243,9 +263,18 @@ export default function EditarActividad() {
 
                 <hr />
                 <h3>Imagen</h3>
-                <p className="editar-img-aviso">
-                    La funcionalidad de cambio de imagen no está disponible en esta versión.
-                </p>
+                {form.imagen && (
+                    <div style={{ marginBottom: '1rem' }}>
+                        <img src={form.imagen} alt="Imagen actual" style={{ maxWidth: 200, borderRadius: 8 }} />
+                        <div style={{ fontSize: '0.9rem', color: '#666' }}>Imagen actual</div>
+                    </div>
+                )}
+                <input
+                    type="file"
+                    name="imagen"
+                    accept="image/*"
+                    onChange={handleFile}
+                />
 
                 {error && <div className="form-error">{error}</div>}
 

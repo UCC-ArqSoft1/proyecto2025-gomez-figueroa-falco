@@ -95,7 +95,7 @@ export default function Actividades() {
                             </div>
                         )}
 
-                        <small>Profesor: {a.profesor}</small>
+                        <small className="actividad-profesor">Profesor: {a.profesor}</small>
                         <Link to={`/actividad/${a.id}`} className="detalle-btn">
                             Detalle
                         </Link>
@@ -106,6 +106,17 @@ export default function Actividades() {
                     <p className="sin-resultados">No se encontraron actividades.</p>
                 )}
             </section>
+
+            <div className="logout-container">
+                <button className="logout-btn" onClick={() => {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('userId');
+                    localStorage.removeItem('rol');
+                    window.location.href = '/login';
+                }}>
+                    Cerrar sesión
+                </button>
+            </div>
         </div>
     );
 }

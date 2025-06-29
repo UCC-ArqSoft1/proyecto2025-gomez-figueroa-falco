@@ -115,24 +115,57 @@
     gap: var(--spacing-md);
     margin-top: var(--spacing-lg);
     flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 56px;
 }
 
-.editar-btn {
+.detalle-back,
+.editar-btn,
+.eliminar-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    margin-top: 0;
+    margin-bottom: 0;
+    height: 48px;
+    min-width: 200px;
+    width: 200px;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    padding: 0;
+    border-radius: var(--border-radius-md);
+    box-sizing: border-box;
+}
+
+.editar-btn,
+.eliminar-btn {
     display: inline-flex;
     align-items: center;
     text-decoration: none;
-    color: var(--color-white);
+    color: var(--color-black);
     font-weight: var(--font-weight-medium);
     font-size: var(--font-size-base);
     padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--color-primary);
+    background: var(--color-gray-200);
     border-radius: var(--border-radius-md);
     transition: all 0.3s ease;
+    border: none;
+    box-shadow: none;
+    min-width: 120px;
+    justify-content: center;
 }
 
-.editar-btn:hover {
-    background: #8b2a2a;
+.editar-btn:hover,
+.eliminar-btn:hover {
+    background: var(--color-gray-300);
+    color: var(--color-black);
     transform: translateY(-2px);
+}
+
+.eliminar-btn {
+    margin-left: 0;
 }
 
 .inscribir-btn {
@@ -233,4 +266,12 @@
 .alert-button:hover {
     background: var(--color-gray-300);
     transform: translateY(-2px);
+}
+
+.detalle-actions-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 0;
+    padding: 0;
 }
