@@ -4,6 +4,8 @@ import (
 	"backend/dao"
 	"crypto/sha256"
 	"fmt"
+	"os"
+	"strconv"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -15,16 +17,29 @@ var (
 )
 
 func init() {
-	user := "root"
-	password := "Base041104"
-	host := "localhost"
-	port := 3306
-	database := "backend"
+
+	user := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASS")
+	host := os.Getenv("DB_HOST")
+	portStr := os.Getenv("DB_PORT")
+	database := os.Getenv("DB_NAME")
+
+	port, err := strconv.Atoi(portStr)
+	if err != nil {
+		panic(fmt.Sprintf("Error convirtiendo DB_PORT: %v", err))
+	}
+
+	// Prints para debug
+	fmt.Println("DB_USER:", user)
+	fmt.Println("DB_PASS:", password)
+	fmt.Println("DB_HOST:", host)
+	fmt.Println("DB_PORT:", port)
+	fmt.Println("DB_NAME:", database)
+
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s?parseTime=true&charset=utf8mb4&loc=Local",
 		user, password, host, port, database)
 
-	var err error
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(fmt.Sprintf("Error conectando a la base de datos: %v", err))

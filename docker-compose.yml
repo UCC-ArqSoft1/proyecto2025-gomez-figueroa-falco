@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: gym_db
+      MYSQL_USER: gym_user
+      MYSQL_PASSWORD: gym_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    depends_on:
+      - mysql
+    environment:
+      DB_USER: gym_user
+      DB_PASS: gym_pass
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: gym_db
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
