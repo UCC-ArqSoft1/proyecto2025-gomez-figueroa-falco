@@ -57,7 +57,7 @@ export default function Actividades() {
                     onChange={(e) => setBusqueda(e.target.value)}
                 />
 
-                {rol === "SOCIO" && (
+                {rol && (
                     <Link to="/mis-actividades" className="mis-actividades-btn">
                         Mis actividades
                     </Link>

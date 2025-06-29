@@ -118,7 +118,7 @@ const ActividadDetalle = () => {
                                         minute: "2-digit",
                                     })}
                                 </p>
-                                {rol === "SOCIO" && (
+                                {(rol === "SOCIO" || rol === "ADMIN") && (
                                     <button
                                         className="inscribir-btn"
                                         onClick={() => handleInscribirse(h.id, h.dia)}

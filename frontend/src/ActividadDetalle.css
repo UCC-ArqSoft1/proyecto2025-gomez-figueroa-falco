@@ -19,7 +19,7 @@
     text-align: left;
     border-radius: var(--border-radius-lg);
     width: 90%;
-    max-width: 1200px;
+    max-width: 1000px;
     min-height: 60vh;
     overflow-y: auto;
     padding: var(--spacing-xl);
