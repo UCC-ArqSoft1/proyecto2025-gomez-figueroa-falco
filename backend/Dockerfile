@@ -14,4 +14,4 @@ RUN go mod download
 RUN go build -o /backend
 
 EXPOSE 8080
-CMD ["sh", "-c", "sleep 10 && /backend"]
+CMD ["/backend"]
