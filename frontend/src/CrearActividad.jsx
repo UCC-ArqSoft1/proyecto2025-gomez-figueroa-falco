@@ -33,8 +33,12 @@ export default function CrearActividad() {
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+        const { name, value } = e.target;
+        setForm(f => ({ ...f, [name]: value }));
         setError("");
+        if (name === "cupo_total") {
+            setHorarios(hs => hs.map(h => ({ ...h, cupo_horario: value })));
+        }
     };
     const handleFile = (e) => {
         setFile(e.target.files[0]);
@@ -45,7 +49,10 @@ export default function CrearActividad() {
         setHorarios(hs => hs.map((h, i) => i === idx ? { ...h, [name]: value } : h));
     };
     const addHorario = () => {
-        setHorarios(hs => [...hs, { hora_inicio: "", hora_fin: "", cupo_horario: "" }]);
+        setHorarios(hs => [
+            ...hs,
+            { hora_inicio: "", hora_fin: "", cupo_horario: form.cupo_total }
+        ]);
     };
     const removeHorario = (idx) => {
         setHorarios(hs => hs.filter((_, i) => i !== idx));
@@ -60,7 +67,7 @@ export default function CrearActividad() {
             dia: getDiaSemana(h.hora_inicio),
             hora_inicio: toFechaHora(h.hora_inicio),
             hora_fin: toFechaHora(h.hora_fin),
-            cupo_horario: Number(h.cupo_horario)
+            cupo_horario: Number(form.cupo_total)
         }));
         data.append("horarios", JSON.stringify(horariosTransformados));
         if (file) data.append("imagen", file);
@@ -144,14 +151,6 @@ export default function CrearActividad() {
                             type="datetime-local"
                             placeholder="Fecha y hora de fin"
                             value={h.hora_fin}
-                            onChange={e => handleHorarioChange(idx, e)}
-                            required
-                        />
-                        <input
-                            name="cupo_horario"
-                            type="number"
-                            placeholder="Cupo Horario"
-                            value={h.cupo_horario}
                             onChange={e => handleHorarioChange(idx, e)}
                             required
                         />

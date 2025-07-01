@@ -80,7 +80,8 @@ func ActividadesDeUsuario(userID uint) ([]dao.Actividad, error) {
 }
 
 func CrearActividadConHorario(input dto.ActividadConHorarioRequest) error {
-	return clients.DB.Transaction(func(tx *gorm.DB) error {
+	db := clients.DB
+	return db.Transaction(func(tx *gorm.DB) error {
 		actividad := dao.Actividad{
 			Nombre:      input.Nombre,
 			Descripcion: input.Descripcion,
@@ -120,7 +121,8 @@ func CrearActividadConHorario(input dto.ActividadConHorarioRequest) error {
 }
 
 func ActualizarActividad(id uint, input dto.ActividadConHorarioRequest) error {
-	return clients.DB.Transaction(func(tx *gorm.DB) error {
+	db := clients.DB
+	return db.Transaction(func(tx *gorm.DB) error {
 		var actividad dao.Actividad
 		if err := tx.First(&actividad, id).Error; err != nil {
 			return errors.New("actividad no encontrada")

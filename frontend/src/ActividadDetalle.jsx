@@ -52,6 +52,14 @@ const ActividadDetalle = () => {
             const data = await res.json();
             if (res.ok) {
                 setAlertMessage(data.msg);
+                setAct(prev => ({
+                    ...prev,
+                    horarios: prev.horarios.map(h =>
+                        h.id === horarioId
+                            ? { ...h, cupo_horario: h.cupo_horario - 1 }
+                            : h
+                    )
+                }));
             } else {
                 setAlertMessage(data.error);
             }
@@ -107,17 +115,20 @@ const ActividadDetalle = () => {
                         <h3>Horarios</h3>
                         {act.horarios.map(h => (
                             <div key={h.id} className="detalle-horario-item">
-                                <p>
-                                    {h.dia}{" "}
-                                    {new Date(h.hora_inicio).toLocaleTimeString([], {
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                    })} –{" "}
-                                    {new Date(h.hora_fin).toLocaleTimeString([], {
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                    })}
-                                </p>
+                                <div className="detalle-horario-info">
+                                    <span>
+                                        {h.dia} {new Date(h.hora_inicio).toLocaleTimeString([], {
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                        })} – {new Date(h.hora_fin).toLocaleTimeString([], {
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                        })}
+                                    </span>
+                                    <span className="detalle-cupo-horario" style={{ marginLeft: 16, color: '#888', fontSize: '1rem' }}>
+                                        <strong>Cupo disponible:</strong> {h.cupo_horario}
+                                    </span>
+                                </div>
                                 {(rol === "SOCIO" || rol === "ADMIN") && (
                                     <button
                                         className="inscribir-btn"

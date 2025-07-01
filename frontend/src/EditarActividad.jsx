@@ -93,8 +93,12 @@ export default function EditarActividad() {
     }, [id]);
 
     const handleChange = (e) => {
-        setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+        const { name, value } = e.target;
+        setForm(f => ({ ...f, [name]: value }));
         setError("");
+        if (name === "cupo_total") {
+            setHorarios(hs => hs.map(h => ({ ...h, cupo_horario: value })));
+        }
     };
 
     const handleFile = (e) => {
@@ -108,7 +112,10 @@ export default function EditarActividad() {
     };
 
     const addHorario = () => {
-        setHorarios(hs => [...hs, { hora_inicio: "", hora_fin: "", cupo_horario: "" }]);
+        setHorarios(hs => [
+            ...hs,
+            { hora_inicio: "", hora_fin: "", cupo_horario: form.cupo_total }
+        ]);
     };
 
     const removeHorario = (idx) => {
@@ -123,7 +130,7 @@ export default function EditarActividad() {
             dia: getDiaSemana(h.hora_inicio),
             hora_inicio: toFechaHora(h.hora_inicio),
             hora_fin: toFechaHora(h.hora_fin),
-            cupo_horario: Number(h.cupo_horario)
+            cupo_horario: Number(form.cupo_total)
         }));
 
         let res, result;
@@ -239,14 +246,6 @@ export default function EditarActividad() {
                             type="datetime-local"
                             placeholder="Fecha y hora de fin"
                             value={h.hora_fin}
-                            onChange={e => handleHorarioChange(idx, e)}
-                            required
-                        />
-                        <input
-                            name="cupo_horario"
-                            type="number"
-                            placeholder="Cupo Horario"
-                            value={h.cupo_horario}
                             onChange={e => handleHorarioChange(idx, e)}
                             required
                         />
