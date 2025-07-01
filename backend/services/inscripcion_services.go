@@ -9,27 +9,26 @@ import (
 
 // InscribirUsuario crea un registro en tabla inscripciones.
 func InscribirUsuario(userID, horarioID, actividadID uint, dia string) error {
-	db := clients.DB
-
 	// Verificar si el usuario existe
-	var usuario dao.User
-	if err := db.First(&usuario, userID).Error; err != nil {
+	_, err := dao.BuscarUsuarioPorID(clients.DB, userID)
+	if err != nil {
 		return errors.New("usuario no existe: " + err.Error())
 	}
 
 	// Verificar si el horario existe
-	var horario dao.Horario
-	if err := db.First(&horario, horarioID).Error; err != nil {
+	horario, err := dao.BuscarHorarioPorID(clients.DB, horarioID)
+	if err != nil {
 		return errors.New("horario no existe: " + err.Error())
 	}
 
+	// Verificar si el horario tiene cupo inicializado
 	if horario.CupoHorario == nil {
-		horario.CupoHorario = new(uint) // reservar memoria para el cupo
-		*horario.CupoHorario = 1        //cupo inicial mínimo
+		return errors.New("El horario no tiene cupo inicializado. Contacte al administrador.")
 	}
+
 	//Verificar si el usuario ya está inscrito en el horario
-	var inscrpcionExistente dao.Inscripcion
-	if err := db.Where("id_usuario = ? AND id_horario = ?", userID, horarioID).First(&inscrpcionExistente).Error; err == nil {
+	_, err = dao.BuscarInscripcionExistente(clients.DB, userID, horarioID)
+	if err == nil {
 		return errors.New("usuario ya inscrito en este horario")
 	}
 
@@ -39,23 +38,22 @@ func InscribirUsuario(userID, horarioID, actividadID uint, dia string) error {
 	}
 
 	// Crear la inscripción
-	// Si el cupo es mayor a 0, se crea la inscripción
 	ins := dao.Inscripcion{
-		Dia:              dia,                // <-- del body
-		HoraInicio:       horario.HoraInicio, // <-- del registro horario
+		Dia:              dia,
+		HoraInicio:       horario.HoraInicio,
 		HoraFin:          horario.HoraFin,
 		IdUsuario:        userID,
 		IdHorario:        horarioID,
 		IdActividad:      actividadID,
-		FechaInscripcion: time.Now(), // Asignar la fecha actual
+		FechaInscripcion: time.Now(),
 	}
-	if err := db.Create(&ins).Error; err != nil {
+	if err := dao.CrearInscripcion(clients.DB, ins); err != nil {
 		return errors.New("error al crear inscripción: " + err.Error())
 	}
 	//Reducir en 1 el cupo disponible
 	*horario.CupoHorario--
 
-	if err := db.Save(&horario).Error; err != nil {
+	if err := dao.ActualizarHorario(clients.DB, &horario); err != nil {
 		return errors.New("error al actualizar cupo horario: " + err.Error())
 	}
 	return nil

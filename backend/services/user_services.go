@@ -1,6 +1,7 @@
 package services
 
 import (
+	"backend/dao"
 	"backend/clients"
 	"crypto/sha256"
 	"fmt"
@@ -46,12 +47,12 @@ func GenerateToken(UserId uint, rol string) (string, error) {
 
 func Login(username string, password string) (string, error) {
 	// Get user by
-	user := clients.GetUserByUsername(username)
-	fmt.Println("Usuario encontrado:", user)
-	if user.Id == 0 {
+	user, err := dao.GetUserByUsername(clients.DB, username)
+	if err != nil {
 		fmt.Println("Usuario no encontrado")
 		return "", fmt.Errorf("usuario no encontrado")
 	}
+	fmt.Println("Usuario encontrado:", user)
 
 	// Hash the password
 	hashedPassword := sha256.Sum256([]byte(password))
@@ -68,5 +69,4 @@ func Login(username string, password string) (string, error) {
 	}
 	// Return the token
 	return token, nil
-
 }

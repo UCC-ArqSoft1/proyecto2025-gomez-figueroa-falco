@@ -7,7 +7,6 @@ import (
 	"os"
 	"strconv"
 	"time"
-
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -34,7 +33,7 @@ func init() {
 	fmt.Println("DB_PASS:", password)
 	fmt.Println("DB_HOST:", host)
 	fmt.Println("DB_PORT:", port)
-	fmt.Println("DB_NAME:", database)
+	fmt.Println("DB_NAME:", database) 
 
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s?parseTime=true&charset=utf8mb4&loc=Local",
@@ -81,7 +80,7 @@ func init() {
 	}); result.Error != nil {
 		fmt.Println("Error creando usuario: ", result.Error)
 	}
-
+	cupo10 := uint(10)
 	if result := DB.Where("nombre = ?", "Funcional").FirstOrCreate(&dao.Actividad{
 		Nombre:      "Funcional",
 		Descripcion: "Entrenaminento basado en movimeintos naturales del cuerpo. Mejora tu eficiencia diaria aprendiendo a moverte mejor y prevenir lesiones",
@@ -94,19 +93,19 @@ func init() {
 				Dia:         "Lunes",
 				HoraInicio:  time.Now(),
 				HoraFin:     time.Now(),
-				CupoHorario: nil,
+				CupoHorario: &cupo10,
 			},
 			{
 				Dia:         "Martes",
 				HoraInicio:  time.Now(),
 				HoraFin:     time.Now(),
-				CupoHorario: nil,
+				CupoHorario: &cupo10,
 			},
 		},
 	}); result.Error != nil {
 		fmt.Println("Error creando actividad: ", result.Error)
 	}
-
+ cupo20 := uint(20)
 	if result := DB.Where("nombre = ?", "Pilates").FirstOrCreate(&dao.Actividad{
 		Nombre:      "Pilates",
 		Descripcion: "Es un método de entrenamiento que utiliza el propio peso corporal para fortalecer y tonificar los músculos, mejorar la postura y la flexibilidad, y aumentar la resistencia física y mental.",
@@ -119,13 +118,13 @@ func init() {
 				Dia:         "Martes",
 				HoraInicio:  time.Now(),
 				HoraFin:     time.Now(),
-				CupoHorario: nil,
+				CupoHorario: &cupo20,
 			},
 			{
 				Dia:         "Jueves",
 				HoraInicio:  time.Now(),
 				HoraFin:     time.Now(),
-				CupoHorario: nil,
+				CupoHorario: &cupo20,
 			},
 		},
 	}); result.Error != nil {
@@ -144,13 +143,13 @@ func init() {
 				Dia:         "Lunes",
 				HoraInicio:  time.Now(),
 				HoraFin:     time.Now(),
-				CupoHorario: nil,
+				CupoHorario: &cupo20,
 			},
 			{
 				Dia:         "Miercoles",
 				HoraInicio:  time.Now(),
 				HoraFin:     time.Now(),
-				CupoHorario: nil,
+				CupoHorario: &cupo20,
 			},
 		},
 	}); result.Error != nil {
@@ -159,16 +158,3 @@ func init() {
 
 }
 
-func GetUserByUsername(username string) dao.User {
-	var user dao.User
-	// SELECT * FROM users WHERE username = ? LIMIT 1
-	DB.First(&user, "username = ?", username)
-	return user
-}
-
-func GetActividadById(id int) dao.Actividad {
-	var actividad dao.Actividad
-	// SELECT * FROM users WHERE username = ? LIMIT 1
-	DB.First(&actividad, id)
-	return actividad
-}
