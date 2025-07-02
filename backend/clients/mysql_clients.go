@@ -91,14 +91,14 @@ func init() {
 		Horarios: []dao.Horario{
 			{
 				Dia:         "Lunes",
-				HoraInicio:  time.Now(),
-				HoraFin:     time.Now(),
+				HoraInicio: time.Date(2025, 7, 7, 18, 0, 0, 0, time.Local),
+				HoraFin:    time.Date(2025, 7, 7, 19, 0, 0, 0, time.Local),
 				CupoHorario: &cupo10,
 			},
 			{
 				Dia:         "Martes",
-				HoraInicio:  time.Now(),
-				HoraFin:     time.Now(),
+				HoraInicio:  time.Date(2025, 7, 8, 18, 0, 0, 0, time.Local),
+				HoraFin:    time.Date(2025, 7, 8, 19, 0, 0, 0, time.Local),
 				CupoHorario: &cupo10,
 			},
 		},
@@ -116,14 +116,14 @@ func init() {
 		Horarios: []dao.Horario{
 			{
 				Dia:         "Martes",
-				HoraInicio:  time.Now(),
-				HoraFin:     time.Now(),
+				HoraInicio:  time.Date(2025, 7, 8, 15, 0, 0, 0, time.Local),
+				HoraFin:    time.Date(2025, 7, 8, 16, 0, 0, 0, time.Local),
 				CupoHorario: &cupo20,
 			},
 			{
 				Dia:         "Jueves",
-				HoraInicio:  time.Now(),
-				HoraFin:     time.Now(),
+				HoraInicio:  time.Date(2025, 7, 10, 17, 0, 0, 0, time.Local),
+				HoraFin:   	time.Date(2025, 7, 10, 18, 0, 0, 0, time.Local),
 				CupoHorario: &cupo20,
 			},
 		},
@@ -141,14 +141,14 @@ func init() {
 		Horarios: []dao.Horario{
 			{
 				Dia:         "Lunes",
-				HoraInicio:  time.Now(),
-				HoraFin:     time.Now(),
+				HoraInicio:  time.Date(2025, 7, 7, 9, 0, 0, 0, time.Local),
+				HoraFin:     time.Date(2025, 7, 7, 10, 0, 0, 0, time.Local),
 				CupoHorario: &cupo20,
 			},
 			{
 				Dia:         "Miercoles",
-				HoraInicio:  time.Now(),
-				HoraFin:     time.Now(),
+				HoraInicio:  time.Date(2025, 7, 9, 9, 0, 0, 0, time.Local),
+				HoraFin:     time.Date(2025, 7, 9, 10, 0, 0, 0, time.Local),
 				CupoHorario: &cupo20,
 			},
 		},
